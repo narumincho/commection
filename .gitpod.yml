@@ -5,3 +5,4 @@ vscode:
   extensions:
     - denoland.vscode-deno
     - rust-lang.rust-analyzer
+    - Dart-Code.dart-code
