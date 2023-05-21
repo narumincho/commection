@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:meta/meta.dart';
 
 @immutable
@@ -48,7 +46,7 @@ final class TextIsEmpty implements RequestExpr<bool> {
 
   @override
   Future<bool> evaluate(Impliment impliment) async {
-    return (await expr.evaluate(impliment)).isNull;
+    return (await expr.evaluate(impliment)).isEmpty;
   }
 }
 

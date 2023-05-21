@@ -6,13 +6,13 @@ void main() {
     return 'ok!!!';
   });
 
-  test('text is empty', () {
-    expect(TextIsEmpty(TextLiteral('')).evaluate(impliment), true);
+  test('text is empty', () async {
+    expect(await TextIsEmpty(TextLiteral('')).evaluate(impliment), true);
   });
 
-  test('text join', () {
+  test('text join', () async {
     expect(
-      TextJoin(TextLiteral('sample:'), Hello()).evaluate(impliment),
+      await TextJoin(TextLiteral('sample: '), Hello()).evaluate(impliment),
       'sample: ok!!!',
     );
   });
