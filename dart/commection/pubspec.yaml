@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   fast_immutable_collections: ^9.1.1
+  meta: ^1.9.1
 
 dev_dependencies:
   lints: ^2.0.0
