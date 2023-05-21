@@ -6,3 +6,6 @@ vscode:
     - denoland.vscode-deno
     - rust-lang.rust-analyzer
     - Dart-Code.dart-code
+
+tasks:
+  - init: dart pub get --directory=./dart/commection
