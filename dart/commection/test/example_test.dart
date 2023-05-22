@@ -16,4 +16,26 @@ void main() {
       'sample: ok!!!',
     );
   });
+
+  test('if', () async {
+    expect(
+      await If(
+        condition: TextIsEmpty(TextLiteral('aa')),
+        thenExpr: TextLiteral('T'),
+        elseExpr: TextLiteral('F'),
+      ).evaluate(impliment),
+      'F',
+    );
+  });
+
+  test('optional match', () async {
+    expect(
+      await OptionalMatch(
+        optional: TextIsEmpty(TextLiteral('aa')),
+        someExpr: (_) => TextLiteral('Some'),
+        noneExpr: TextLiteral('None'),
+      ).evaluate(impliment),
+      'Some',
+    );
+  });
 }

@@ -51,6 +51,61 @@ final class TextIsEmpty implements RequestExpr<bool> {
 }
 
 @immutable
+final class If<T> implements RequestExpr<T> {
+  const If({
+    required this.condition,
+    required this.thenExpr,
+    required this.elseExpr,
+  });
+
+  final RequestExpr<bool> condition;
+  final RequestExpr<T> thenExpr;
+  final RequestExpr<T> elseExpr;
+
+  @override
+  Future<T> evaluate(Impliment impliment) async {
+    if (await condition.evaluate(impliment)) {
+      return thenExpr.evaluate(impliment);
+    }
+    return elseExpr.evaluate(impliment);
+  }
+}
+
+@immutable
+final class OptionalMatch<T, R> implements RequestExpr<R> {
+  const OptionalMatch({
+    required this.optional,
+    required this.someExpr,
+    required this.noneExpr,
+  });
+
+  final RequestExpr<T?> optional;
+  final RequestExpr<R> Function(RequestExpr<T>) someExpr;
+  final RequestExpr<R> noneExpr;
+
+  @override
+  Future<R> evaluate(Impliment impliment) async {
+    final optionalEvaluted = await optional.evaluate(impliment);
+    if (optionalEvaluted == null) {
+      return noneExpr.evaluate(impliment);
+    }
+    return someExpr(Literal(optionalEvaluted)).evaluate(impliment);
+  }
+}
+
+@immutable
+final class Literal<T> implements RequestExpr<T> {
+  const Literal(this.value);
+
+  final T value;
+
+  @override
+  Future<T> evaluate(Impliment impliment) async {
+    return value;
+  }
+}
+
+@immutable
 final class Impliment {
   Impliment({
     required this.hello,
