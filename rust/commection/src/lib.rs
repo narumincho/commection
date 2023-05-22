@@ -1,3 +1,5 @@
+mod example;
+
 pub struct Server<ImplementType, RequestExpr> {
     pub schema: Schema<ImplementType, RequestExpr>,
     pub implementation: ImplementType,
