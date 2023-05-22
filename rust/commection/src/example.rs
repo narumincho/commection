@@ -1,40 +1,46 @@
-pub enum UntypedRequestExpr {
-    Hello(Hello),
-    StringLiteral(String),
-}
-
 pub struct Hello {}
 
-impl Evaluable for Hello {
-    type T = String;
-
-    fn evaluate<I: Impliment>() -> String {
+impl Evaluable<String> for Hello {
+    fn evaluate<I: Impliment>(self: &Self) -> String {
         return <I as Impliment>::hello();
     }
 }
 
-pub trait Evaluable {
-    type T;
-    fn evaluate<I: Impliment>() -> Self::T;
+pub struct TextLiteral {
+    pub value: String,
 }
 
-pub struct RequestExpr<T> {
-    response_type: std::marker::PhantomData<T>,
-    expr: UntypedRequestExpr,
+impl Evaluable<String> for TextLiteral {
+    fn evaluate<I: Impliment>(self: &Self) -> String {
+        return self.value.clone();
+    }
 }
 
-pub fn hello() -> RequestExpr<String> {
-    return RequestExpr {
-        response_type: std::marker::PhantomData::<String>,
-        expr: UntypedRequestExpr::Hello(Hello {}),
-    };
+pub struct TextJoin<Left: Evaluable<String>, Right: Evaluable<String>> {
+    pub left: Box<Left>,
+    pub right: Box<Right>,
 }
 
-pub fn stringLiteral(value: &String) -> RequestExpr<String> {
-    return RequestExpr {
-        response_type: std::marker::PhantomData::<String>,
-        expr: UntypedRequestExpr::StringLiteral(value.clone()),
-    };
+impl<Left: Evaluable<String>, Right: Evaluable<String>> Evaluable<String>
+    for TextJoin<Left, Right>
+{
+    fn evaluate<I: Impliment>(self: &Self) -> String {
+        return self.left.evaluate::<I>() + &self.right.evaluate::<I>();
+    }
+}
+
+pub struct TextIsEmpty<Expr: Evaluable<String>> {
+    pub expr: Box<Expr>,
+}
+
+impl<Expr: Evaluable<String>> Evaluable<bool> for TextIsEmpty<Expr> {
+    fn evaluate<I: Impliment>(self: &Self) -> bool {
+        return *&self.expr.evaluate::<I>().is_empty();
+    }
+}
+
+pub trait Evaluable<T> {
+    fn evaluate<I: Impliment>(&self) -> T;
 }
 
 pub trait Impliment {
@@ -54,10 +60,29 @@ mod tests {
     }
 
     #[test]
-    fn it_works() {
-        let a = super::Hello {};
-        let result: String = <super::Hello as Evaluable>::evaluate::<TestImpl>();
+    fn text_is_empty() {
+        let k = super::TextIsEmpty {
+            expr: Box::new(super::TextLiteral {
+                value: "".to_string(),
+            }),
+        };
 
-        assert_eq!(result, "ok!!!");
+        let result = k.evaluate::<TestImpl>();
+
+        assert_eq!(result, true);
+    }
+
+    #[test]
+    fn text_join() {
+        let expr = super::TextJoin {
+            left: Box::new(super::TextLiteral {
+                value: "sample: ".to_string(),
+            }),
+            right: Box::new(super::Hello {}),
+        };
+
+        let result = expr.evaluate::<TestImpl>();
+
+        assert_eq!(result, "sample: ok!!!");
     }
 }
