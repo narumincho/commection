@@ -25,7 +25,21 @@ Deno.test("text join", async () => {
   );
 });
 
-Deno.test("if", async () => {
+Deno.test("if true", async () => {
+  assertEquals(
+    await evaluate(
+      impliment,
+      ifExpr({
+        condition: textIsEmpty(textLiteral("")),
+        thenExpr: textLiteral("T"),
+        elseExpr: textLiteral("F"),
+      }),
+    ),
+    "T",
+  );
+});
+
+Deno.test("if false", async () => {
   assertEquals(
     await evaluate(
       impliment,
