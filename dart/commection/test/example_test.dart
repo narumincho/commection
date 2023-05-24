@@ -17,7 +17,18 @@ void main() {
     );
   });
 
-  test('if', () async {
+  test('if true', () async {
+    expect(
+      await If(
+        condition: TextIsEmpty(TextLiteral('')),
+        thenExpr: TextLiteral('T'),
+        elseExpr: TextLiteral('F'),
+      ).evaluate(impliment),
+      'T',
+    );
+  });
+
+  test('if false', () async {
     expect(
       await If(
         condition: TextIsEmpty(TextLiteral('aa')),
@@ -31,11 +42,11 @@ void main() {
   test('optional match', () async {
     expect(
       await OptionalMatch(
-        optional: TextIsEmpty(TextLiteral('aa')),
-        someExpr: (_) => TextLiteral('Some'),
+        optional: TextLiteral('aa'),
+        someExpr: (value) => TextJoin(TextLiteral('Some('), value),
         noneExpr: TextLiteral('None'),
       ).evaluate(impliment),
-      'Some',
+      'Some(aa',
     );
   });
 }
