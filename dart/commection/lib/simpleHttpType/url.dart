@@ -4,11 +4,19 @@ import 'package:meta/meta.dart';
 ///  Trailing Slash とか気にしなくて良い構造化された読み取り専用のURL
 @immutable
 class SimpleUrl {
-  SimpleUrl({
+  const SimpleUrl({
     required this.origin,
     required this.pathSegments,
     required this.query,
   });
+
+  factory SimpleUrl.fromUri(Uri uri) {
+    return SimpleUrl(
+      origin: uri.origin,
+      pathSegments: IList(uri.pathSegments),
+      query: IMap(uri.queryParameters),
+    );
+  }
 
   final String origin;
   final IList<String> pathSegments;
