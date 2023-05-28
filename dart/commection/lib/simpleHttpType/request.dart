@@ -1,5 +1,7 @@
+import 'package:commection/lazy.dart';
 import 'package:commection/simpleHttpType/url.dart';
 import 'package:meta/meta.dart';
+import 'package:narumincho_json/narumincho_json.dart';
 
 @immutable
 sealed class SimpleRequest {
@@ -29,10 +31,12 @@ final class SimpleRequestPost implements SimpleRequest {
   const SimpleRequestPost({
     required this.url,
     required this.header,
+    required this.bodyLazy,
   });
 
   final SimpleUrl url;
   final SimpleRequestHeader header;
+  final Lazy<JsonValue> bodyLazy;
 }
 
 @immutable

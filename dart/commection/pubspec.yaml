@@ -9,6 +9,7 @@ environment:
 dependencies:
   fast_immutable_collections: ^9.1.2
   meta: ^1.9.1
+  narumincho_json: ^0.1.0
   narumincho_util: ^0.1.1
 
 dev_dependencies:

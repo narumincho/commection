@@ -1,5 +1,9 @@
 import { NonEmptyString, nonEmptyStringFrom } from "../nonEmpty.ts";
 
+/**
+ * Structured, read-only URLs
+ * where you don't have to worry about Trailing Slash or anything else
+ */
 export type SimpleUrl = {
   readonly origin: string;
   readonly pathSegments: ReadonlyArray<NonEmptyString>;
