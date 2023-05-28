@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:narumincho_util/narumincho_util.dart';
 
 @immutable
 final class Server<ImplementType, RequestExpr> {
@@ -15,5 +16,5 @@ final class Server<ImplementType, RequestExpr> {
 class Schema<ImplementType, RequestExpr> {
   const Schema({required this.name});
 
-  final String name;
+  final NonEmptyString name;
 }
