@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:meta/meta.dart';
 import 'package:narumincho_util/narumincho_util.dart';
 
-/// Structured, read-only URLs 
+/// Structured, read-only URLs
 /// where you don't have to worry about Trailing Slash or anything else
 @immutable
 class SimpleUrl {
