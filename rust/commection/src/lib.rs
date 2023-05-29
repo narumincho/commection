@@ -1,4 +1,5 @@
 mod example;
+mod simpleHttpType;
 
 pub struct Server<ImplementType, RequestExpr> {
     pub schema: Schema<ImplementType, RequestExpr>,
