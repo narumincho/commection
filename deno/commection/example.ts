@@ -1,4 +1,6 @@
-export type RequestExpr<T> = UntypedRequestExpr & T;
+import { createPhantomData, PhantomData } from "../phantom.ts";
+
+export type RequestExpr<T> = UntypedRequestExpr & PhantomData<T>;
 
 const typeAssert = <T>(untyped: UntypedRequestExpr): RequestExpr<T> =>
   untyped as RequestExpr<T>;
@@ -27,7 +29,7 @@ export type UntypedRequestExpr = {
   readonly none: UntypedRequestExpr;
 } | {
   readonly type: "literal";
-  readonly value: UntypedRequestExpr;
+  readonly value: unknown;
 };
 
 export const evaluate = async <T>(
@@ -54,26 +56,27 @@ export const evaluate = async <T>(
       return result as T;
     }
     case "if": {
-      const condition = await evaluate<T>(impliment, expr.condition);
+      const condition = await evaluate(impliment, expr.condition);
       if (condition) {
-        const result = await evaluate<T>(impliment, expr.thenExpr);
-        return result;
+        return await evaluate(
+          impliment,
+          typeAssert<T>(expr.thenExpr),
+        );
       }
-      const result = await evaluate<T>(impliment, expr.elseExpr);
-      return result;
+      return await evaluate(impliment, typeAssert<T>(expr.elseExpr));
     }
     case "optionalMatch": {
-      const optional = await evaluate(impliment, expr.optional);
+      const optional = await evaluate(impliment, typeAssert(expr.optional));
       if (optional === undefined) {
-        const result = await evaluate<T>(impliment, expr.none);
+        const result = await evaluate(impliment, typeAssert<T>(expr.none));
         return result;
       }
       const result = await evaluate<T>(
         impliment,
-        expr.some({
+        typeAssert(expr.some({
           type: "literal",
           value: optional,
-        }),
+        })),
       );
       return result;
     }
@@ -122,6 +125,7 @@ export const ifExpr = <R>(
   condition: parameter.condition,
   thenExpr: parameter.thenExpr,
   elseExpr: parameter.elseExpr,
+  ...createPhantomData<R>(),
 });
 
 export const optionalMatch = <T, R>(
@@ -133,8 +137,9 @@ export const optionalMatch = <T, R>(
 ): RequestExpr<R> => ({
   type: "optionalMatch",
   optional: parameter.optional,
-  some: (v) => parameter.some(v),
+  some: (v) => parameter.some(typeAssert(v)),
   none: parameter.none,
+  ...createPhantomData<R>(),
 });
 
 export type Impliment = {

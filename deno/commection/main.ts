@@ -1,3 +1,5 @@
+import { PhantomData } from "../phantom.ts";
+
 export type Server<ImplementType, RequestExpr> = {
   readonly schema: Schema<ImplementType, RequestExpr>;
   readonly implementation: ImplementType;
@@ -9,11 +11,6 @@ export type Schema<ImplementType, RequestExpr> = {
   readonly functionDefinitions: ReadonlyArray<FunctionDefinition>;
   readonly implementType: PhantomData<ImplementType>;
   readonly requestExpr: PhantomData<RequestExpr>;
-};
-
-export type PhantomData<T> = {
-  /** Do not create with this field */
-  readonly __bland: T;
 };
 
 export type TypeDefinition = {
@@ -37,7 +34,7 @@ export type TypeStructure = {
 export type Pattern = {
   readonly type: Type;
   readonly parameter: ReadonlyArray<string>;
-  readonly arguments: ReadonlyArray<Type>
+  readonly arguments: ReadonlyArray<Type>;
 };
 
 export type Field = {
