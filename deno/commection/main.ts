@@ -1,15 +1,13 @@
 import { PhantomData } from "../phantom.ts";
 
-export type Server<ImplementType, RequestExpr> = {
-  readonly schema: Schema<ImplementType, RequestExpr>;
-  readonly implementation: ImplementType;
+export type Server<RequestExpr> = {
+  readonly schema: Schema<RequestExpr>;
 };
 
-export type Schema<ImplementType, RequestExpr> = {
+export type Schema<RequestExpr> = {
   readonly name: string;
   readonly typeDefinitions: ReadonlyArray<TypeDefinition>;
   readonly functionDefinitions: ReadonlyArray<FunctionDefinition>;
-  readonly implementType: PhantomData<ImplementType>;
   readonly requestExpr: PhantomData<RequestExpr>;
 };
 
