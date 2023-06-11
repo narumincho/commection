@@ -1,5 +1,5 @@
 use super::data;
-use super::identifer;
+use super::identifier;
 
 /// 入れ子の回数
 struct Indent {
@@ -149,7 +149,7 @@ fn parameter_list_to_document(parameter_list: &Vec<data::ParameterWithDocument>)
 ///
 /// extends unknown をつけた理由はJSXでも解釈できるようにするため
 fn type_parameter_list_to_string(
-    type_parameter_list: &Vec<identifer::Identifer>,
+    type_parameter_list: &Vec<identifier::Identifier>,
     code_type: &data::CodeType,
 ) -> String {
     if *code_type == data::CodeType::JavaScript || type_parameter_list.is_empty() {
@@ -213,9 +213,9 @@ fn type_to_string(r#type: &data::Type) -> String {
                 })
         }
 
-        data::Type::ScopeInFile(identifer) => identifer.get(),
+        data::Type::ScopeInFile(identifier) => identifier.get(),
 
-        data::Type::ScopeInGlobal(identifer) => identifer.get(),
+        data::Type::ScopeInGlobal(identifier) => identifier.get(),
         data::Type::ImportedType(imported_type) => {
             String::from("$$$") + &imported_type.module_name + "." + &imported_type.name.get()
         }
@@ -293,9 +293,9 @@ fn expr_to_string(expr: &data::Expr, indent: &Indent, code_type: &data::CodeType
                 + &lambda_body_to_string(&lambda.statement_list, indent, code_type)
         }
 
-        data::Expr::Variable(identifer) => identifer.get(),
+        data::Expr::Variable(identifier) => identifier.get(),
 
-        data::Expr::GlobalObjects(identifer) => identifer.get(),
+        data::Expr::GlobalObjects(identifier) => identifier.get(),
         data::Expr::ImportedVariable(imported_variable) => {
             String::from("$$$")
                 + &imported_variable.module_name
@@ -635,8 +635,8 @@ fn object_literal_to_string(
 
                 data::Member::KeyValue(data::KeyValue {
                     key,
-                    value: data::Expr::Variable(value_identifer),
-                }) if *key == value_identifer.get() => key.clone(),
+                    value: data::Expr::Variable(value_identifier),
+                }) if *key == value_identifier.get() => key.clone(),
                 data::Member::KeyValue(data::KeyValue { key, value }) => {
                     (property_name_to_string(key))
                         + ": "
@@ -743,7 +743,7 @@ fn index_access_to_string(
     code_type: &data::CodeType,
 ) -> String {
     match index_expr {
-        data::Expr::StringLiteral(string) if identifer::is_safe_property_name(string) => {
+        data::Expr::StringLiteral(string) if identifier::is_safe_property_name(string) => {
             String::from(".") + string
         }
         _ => String::from("[") + &expr_to_string(index_expr, indent, code_type) + "]",
@@ -800,7 +800,7 @@ fn switch_to_string(
 }
 
 fn property_name_to_string(property_name: &str) -> String {
-    if identifer::is_safe_property_name(property_name) {
+    if identifier::is_safe_property_name(property_name) {
         String::from(property_name)
     } else {
         string_literal_value_to_string(property_name)

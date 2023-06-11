@@ -1,25 +1,25 @@
 #[derive(PartialEq, Eq, Debug)]
-pub struct Identifer {
+pub struct Identifier {
     value: String,
 }
 
-impl Identifer {
-    /// Identifer の中身の文字を取得する
+impl Identifier {
+    /// Identifier の中身の文字を取得する
     pub fn get(&self) -> String {
         self.value.clone()
     }
 }
 
-impl std::fmt::Display for Identifer {
+impl std::fmt::Display for Identifier {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.get())
     }
 }
 
-pub fn from_string(word: &str) -> Identifer {
+pub fn from_string(word: &str) -> Identifier {
     let mut chars = word.chars();
     let first_char = chars.next();
-    Identifer {
+    Identifier {
         value: match first_char {
             None => "$00".to_string(),
             Some(first_char) => {
@@ -42,13 +42,13 @@ pub fn from_string(word: &str) -> Identifer {
 fn test_from_string() {
     assert_eq!(
         from_string("a"),
-        Identifer {
+        Identifier {
             value: String::from("a")
         }
     );
     assert_eq!(
         from_string("this"),
-        Identifer {
+        Identifier {
             value: String::from("this_")
         }
     );
@@ -170,7 +170,7 @@ const RESERVED_BY_LANGUAGE_WORD_SET: [&str; 68] = [
 /// ({ "": "empty"}[""])
 /// ```
 /// プロパティ名として直接コードで指定できるかどうか
-/// `isIdentifer`とは予約語を指定できるかの面で違う
+/// `isIdentifier`とは予約語を指定できるかの面で違う
 ///
 pub fn is_safe_property_name(word: &str) -> bool {
     let mut chars = word.chars();
