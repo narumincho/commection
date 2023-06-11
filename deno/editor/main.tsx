@@ -1,5 +1,10 @@
 import React from "https://esm.sh/react@18.2.0?pin=v124";
 import { createRoot } from "https://esm.sh/react-dom@18.2.0/client?pin=v124";
+import { styled } from 'https://esm.sh/@stitches/react@1.2.8?pin=v124';
+
+const StyledDiv = styled('div', {
+  background: "SkyBlue"
+});
 
 /**
  * commection のエディターを動かす
@@ -17,7 +22,9 @@ export const startEditor = (): void => {
     rootElement,
   ).render(
     <React.StrictMode>
-      <div>やっぱhtmlのbodyはSSRしなくても良いや</div>
+      <div>やっぱhtmlのbodyはSSRしなくても良いや
+        <StyledDiv>スタイルテスト</StyledDiv>
+      </div>
     </React.StrictMode>,
   );
 };
