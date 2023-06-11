@@ -1,68 +1,68 @@
-import { assertEquals } from "https://deno.land/std@0.189.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.191.0/testing/asserts.ts";
 import {
   evaluate,
   hello,
   ifExpr,
-  Impliment,
+  Implement,
   optionalMatch,
   textIsEmpty,
   textJoin,
   textLiteral,
 } from "./example.ts";
 
-const impliment: Impliment = {
+const implement: Implement = {
   hello: () => Promise.resolve("ok!!!"),
 };
 
 Deno.test("text is empty", async () => {
-  assertEquals(await evaluate(impliment, textIsEmpty(textLiteral(""))), true);
+  assertEquals(await evaluate(implement, textIsEmpty(textLiteral(""))), true);
 });
 
 Deno.test("text join", async () => {
   assertEquals(
-    await evaluate(impliment, textJoin(textLiteral("sample: "), hello)),
-    "sample: ok!!!",
+    await evaluate(implement, textJoin(textLiteral("sample: "), hello)),
+    "sample: ok!!!"
   );
 });
 
 Deno.test("if true", async () => {
   assertEquals(
     await evaluate(
-      impliment,
+      implement,
       ifExpr({
         condition: textIsEmpty(textLiteral("")),
         thenExpr: textLiteral("T"),
         elseExpr: textLiteral("F"),
-      }),
+      })
     ),
-    "T",
+    "T"
   );
 });
 
 Deno.test("if false", async () => {
   assertEquals(
     await evaluate(
-      impliment,
+      implement,
       ifExpr({
         condition: textIsEmpty(textLiteral("aa")),
         thenExpr: textLiteral("T"),
         elseExpr: textLiteral("F"),
-      }),
+      })
     ),
-    "F",
+    "F"
   );
 });
 
 Deno.test("optional match", async () => {
   assertEquals(
     await evaluate(
-      impliment,
+      implement,
       optionalMatch<string, string>({
         optional: textLiteral("aa"),
         some: (value) => textJoin(textLiteral("Some("), value),
         none: textLiteral("None"),
-      }),
+      })
     ),
-    "Some(aa",
+    "Some(aa"
   );
 });

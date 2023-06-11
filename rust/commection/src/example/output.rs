@@ -1,8 +1,8 @@
 pub struct Hello {}
 
 impl Evaluable<String> for Hello {
-    fn evaluate<I: Impliment>(self: &Self) -> String {
-        return <I as Impliment>::hello();
+    fn evaluate<I: Implement>(self: &Self) -> String {
+        return <I as Implement>::hello();
     }
 }
 
@@ -11,7 +11,7 @@ pub struct TextLiteral {
 }
 
 impl Evaluable<String> for TextLiteral {
-    fn evaluate<I: Impliment>(self: &Self) -> String {
+    fn evaluate<I: Implement>(self: &Self) -> String {
         return self.value.clone();
     }
 }
@@ -24,7 +24,7 @@ pub struct TextJoin<Left: Evaluable<String>, Right: Evaluable<String>> {
 impl<Left: Evaluable<String>, Right: Evaluable<String>> Evaluable<String>
     for TextJoin<Left, Right>
 {
-    fn evaluate<I: Impliment>(self: &Self) -> String {
+    fn evaluate<I: Implement>(self: &Self) -> String {
         return self.left.evaluate::<I>() + &self.right.evaluate::<I>();
     }
 }
@@ -34,7 +34,7 @@ pub struct TextIsEmpty<Expr: Evaluable<String>> {
 }
 
 impl<Expr: Evaluable<String>> Evaluable<bool> for TextIsEmpty<Expr> {
-    fn evaluate<I: Impliment>(self: &Self) -> bool {
+    fn evaluate<I: Implement>(self: &Self) -> bool {
         return *&self.expr.evaluate::<I>().is_empty();
     }
 }
@@ -49,7 +49,7 @@ pub struct IfExpr<R, Condition: Evaluable<bool>, ThenExpr: Evaluable<R>, ElseExp
 impl<R, Condition: Evaluable<bool>, ThenExpr: Evaluable<R>, ElseExpr: Evaluable<R>> Evaluable<R>
     for IfExpr<R, Condition, ThenExpr, ElseExpr>
 {
-    fn evaluate<I: Impliment>(&self) -> R {
+    fn evaluate<I: Implement>(&self) -> R {
         if self.condition.evaluate::<I>() {
             self.then_expr.evaluate::<I>()
         } else {
@@ -86,7 +86,7 @@ impl<
         NoneExpr: Evaluable<R>,
     > Evaluable<R> for OptionalMatch<T, R, Optional, SomeExprReturn, SomeExpr, NoneExpr>
 {
-    fn evaluate<I: Impliment>(&self) -> R {
+    fn evaluate<I: Implement>(&self) -> R {
         match self.optional.evaluate::<I>() {
             Some(value) => (self.some)(Literal { value }).evaluate::<I>(),
             None => self.none.evaluate::<I>(),
@@ -95,24 +95,24 @@ impl<
 }
 
 impl<T: Clone> Evaluable<T> for Literal<T> {
-    fn evaluate<I: Impliment>(&self) -> T {
+    fn evaluate<I: Implement>(&self) -> T {
         self.value.clone()
     }
 }
 
 pub trait Evaluable<T> {
-    fn evaluate<I: Impliment>(&self) -> T;
+    fn evaluate<I: Implement>(&self) -> T;
 }
 
-pub trait Impliment {
+pub trait Implement {
     fn hello() -> String;
 }
 
-struct Server<I: Impliment> {
-    impliment: I,
+struct Server<I: Implement> {
+    implement: I,
 }
 
-impl<I: Impliment> Server<I> {
+impl<I: Implement> Server<I> {
     fn evalute<T, E: Evaluable<T>>(expr: E) -> T {
         expr.evaluate::<I>()
     }
@@ -126,7 +126,7 @@ mod tests {
 
     struct TestImpl {}
 
-    impl super::Impliment for TestImpl {
+    impl super::Implement for TestImpl {
         fn hello() -> String {
             return "ok!!!".to_string();
         }

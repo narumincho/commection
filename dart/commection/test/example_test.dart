@@ -2,17 +2,17 @@ import 'package:commection/example.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final impliment = Impliment(hello: () async {
+  final implement = Implement(hello: () async {
     return 'ok!!!';
   });
 
   test('text is empty', () async {
-    expect(await TextIsEmpty(TextLiteral('')).evaluate(impliment), true);
+    expect(await TextIsEmpty(TextLiteral('')).evaluate(implement), true);
   });
 
   test('text join', () async {
     expect(
-      await TextJoin(TextLiteral('sample: '), Hello()).evaluate(impliment),
+      await TextJoin(TextLiteral('sample: '), Hello()).evaluate(implement),
       'sample: ok!!!',
     );
   });
@@ -23,7 +23,7 @@ void main() {
         condition: TextIsEmpty(TextLiteral('')),
         thenExpr: TextLiteral('T'),
         elseExpr: TextLiteral('F'),
-      ).evaluate(impliment),
+      ).evaluate(implement),
       'T',
     );
   });
@@ -34,7 +34,7 @@ void main() {
         condition: TextIsEmpty(TextLiteral('aa')),
         thenExpr: TextLiteral('T'),
         elseExpr: TextLiteral('F'),
-      ).evaluate(impliment),
+      ).evaluate(implement),
       'F',
     );
   });
@@ -45,7 +45,7 @@ void main() {
         optional: TextLiteral('aa'),
         someExpr: (value) => TextJoin(TextLiteral('Some('), value),
         noneExpr: TextLiteral('None'),
-      ).evaluate(impliment),
+      ).evaluate(implement),
       'Some(aa',
     );
   });
