@@ -1,7 +1,9 @@
+import { StructuredHtml } from "../html/data.ts";
+
 export type SimpleResponse =
   | {
-      readonly status: "ok";
-      readonly body: string;
+      readonly status: "okHtml";
+      readonly body: StructuredHtml;
     }
   | {
       readonly status: "notFoundError";

@@ -1,37 +1,38 @@
-import { PhantomData, createPhantomData } from "../phantom.ts";
+import { PhantomData } from "../phantom.ts";
 import { requestToSimpleRequest } from "../simpleHttpType/requestToSimpleRequest.ts";
 import { simpleResponseToResponse } from "../simpleHttpType/simepleResponseToResponse.ts";
 import { commectionResponseToSimpleResponse } from "./commectionResponseToSimpleResponse.ts";
 import { handleRequest } from "./server.ts";
 import { simpleRequestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
 
-export const heandleCommectionRequest = (
-  request: Request
-): Response | undefined => {
-  const simpleRequest = requestToSimpleRequest(request);
+export const heandleCommectionRequest = <RequestExpr>(parameter: {
+  readonly request: Request;
+  readonly schema: Schema<RequestExpr>;
+  readonly pathPrefix: ReadonlyArray<string>;
+}): Response | undefined => {
+  const simpleRequest = requestToSimpleRequest(parameter.request);
   if (simpleRequest === undefined) {
-    return new Response("Bad Request", { status: 400 });
+    return new Response("Unsupported request", { status: 400 });
   }
   const commectionRequest = simpleRequestToCommectionRequest({
     simpleRequest,
     iconHash: "wip",
     scriptHash: "wip",
-    pathPrefix: ["wip"],
+    pathPrefix: parameter.pathPrefix,
     requestExprParser: () => undefined,
-    schema: {
-      name: "wip",
-      functionDefinitions: [],
-      typeDefinitions: [],
-      requestExpr: createPhantomData(),
-    },
+    schema: parameter.schema,
   });
   if (commectionRequest.type === "skip") {
     return undefined;
   }
   if (commectionRequest.type === "error") {
-    return new Response("Internal Server Error", { status: 500 });
+    return new Response("Internal Commection Server Error", { status: 500 });
   }
-  const commectionResponse = handleRequest(commectionRequest);
+  const commectionResponse = handleRequest({
+    request: commectionRequest,
+    origin: simpleRequest.url.origin,
+    pathPrefix: parameter.pathPrefix,
+  });
   if (commectionResponse === undefined) {
     return undefined;
   }

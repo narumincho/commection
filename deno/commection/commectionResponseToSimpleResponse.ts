@@ -5,7 +5,7 @@ export const commectionResponseToSimpleResponse = (
   commectionResponse: CommectionResponse
 ): SimpleResponse => {
   return {
-    status: "ok",
+    status: "okHtml",
     body: commectionResponse.html,
   };
 };

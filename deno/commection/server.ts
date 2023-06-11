@@ -1,3 +1,5 @@
+import { StructuredHtml } from "../html/data.ts";
+
 export type CommectionRequest<RequestExpr> =
   | {
       readonly type: "editorHtml";
@@ -36,7 +38,7 @@ export type Type = {
 
 export type CommectionResponse = {
   readonly type: "editorHtml";
-  readonly html: string;
+  readonly html: StructuredHtml;
 };
 
 export type RequestParseResult<RequestExpr> =
@@ -46,11 +48,24 @@ export type RequestParseResult<RequestExpr> =
     }
   | { readonly type: "error" };
 
-export const handleRequest = <RequestExpr>(
-  request: CommectionRequest<RequestExpr>
-): CommectionResponse => {
+export const handleRequest = <RequestExpr>(parameter: {
+  readonly request: CommectionRequest<RequestExpr>;
+  readonly pathPrefix: ReadonlyArray<string>;
+  readonly origin: string;
+}): CommectionResponse => {
   return {
     type: "editorHtml",
-    html: "wip",
+    html: {
+      appName: "commection",
+      pageName: "commection",
+      description: "commection",
+      ietfLanguageTag: "en",
+      twitterCard: "SummaryCard",
+      coverImageUrl: new URL(parameter.origin + "/cover.png"),
+      iconUrl: new URL(parameter.origin + "/icon.png"),
+      themeColor: undefined,
+      url: undefined,
+      children: [],
+    },
   };
 };
