@@ -1,5 +1,6 @@
 import { StructuredHtml } from "../html/data.ts";
 import dist from "../dist.json" assert { type: "json" };
+import { div } from "../html/interface.ts";
 
 export type CommectionRequest<RequestExpr> =
   | {
@@ -56,37 +57,78 @@ export type RequestParseResult<RequestExpr> =
     }
   | { readonly type: "error" };
 
+const createHtml = (parameter: {
+  readonly pathPrefix: ReadonlyArray<string>;
+  readonly origin: string;
+}): StructuredHtml => ({
+  appName: "commection",
+  pageName: "commection",
+  description: "commection",
+  ietfLanguageTag: "en",
+  twitterCard: "SummaryCard",
+  coverImageUrl: new URL(parameter.origin + "/cover.png"),
+  iconUrl: new URL(
+    parameter.origin +
+      `/${parameter.pathPrefix.join("/")}/editor-assets/icon-${
+        dist.iconHash
+      }.png`
+  ),
+  scriptUrlList: [
+    new URL(
+      parameter.origin +
+        `/${parameter.pathPrefix.join("/")}/editor-assets/script-${
+          dist.scriptHash
+        }.js`
+    ),
+  ],
+  themeColor: undefined,
+  url: undefined,
+  children: [div({ id: "root" }, [])],
+});
+
 export const handleRequest = <RequestExpr>(parameter: {
   readonly request: CommectionRequest<RequestExpr>;
   readonly pathPrefix: ReadonlyArray<string>;
   readonly origin: string;
 }): CommectionResponse => {
-  return {
-    type: "editorHtml",
-    html: {
-      appName: "commection",
-      pageName: "commection",
-      description: "commection",
-      ietfLanguageTag: "en",
-      twitterCard: "SummaryCard",
-      coverImageUrl: new URL(parameter.origin + "/cover.png"),
-      iconUrl: new URL(
-        parameter.origin +
-          `/${parameter.pathPrefix.join("/")}/editor-assets/icon-${
-            dist.iconHash
-          }.png`
-      ),
-      scriptUrlList: [
-        new URL(
-          parameter.origin +
-            `/${parameter.pathPrefix.join("/")}/editor-assets/icon-${
-              dist.scriptHash
-            }.js`
-        ),
-      ],
-      themeColor: undefined,
-      url: undefined,
-      children: [],
-    },
-  };
+  switch (parameter.request.type) {
+    case "editorHtml":
+      return {
+        type: "editorHtml",
+        html: createHtml({
+          origin: parameter.origin,
+          pathPrefix: parameter.pathPrefix,
+        }),
+      };
+
+    case "editorOgpImage":
+      return {
+        type: "editorIcon",
+      };
+    case "editorIcon":
+      return {
+        type: "editorIcon",
+      };
+    case "editorScript":
+      return {
+        type: "editorScript",
+      };
+    case "editorAssetNotFound":
+      return {
+        type: "editorHtml",
+        html: createHtml({
+          origin: parameter.origin,
+          pathPrefix: parameter.pathPrefix,
+        }),
+      };
+
+    case "apiRequest":
+      return {
+        type: "editorHtml",
+        html: createHtml({
+          origin: parameter.origin,
+          pathPrefix: parameter.pathPrefix,
+        }),
+      };
+  }
 };

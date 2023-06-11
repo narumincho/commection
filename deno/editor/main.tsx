@@ -21,3 +21,5 @@ export const startEditor = (): void => {
     </React.StrictMode>,
   );
 };
+
+startEditor();
