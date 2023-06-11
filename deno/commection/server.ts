@@ -1,23 +1,25 @@
-import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
-import { SimpleRequest } from "../simpleHttpType/request.ts";
-import { Schema } from "./main.ts";
-
-export type CommectionRequest<RequestExpr> = {
-  readonly type: "editorHtml";
-  readonly functionOrType: FunctionOrType | undefined;
-} | {
-  readonly type: "editorOgpImage";
-  readonly functionOrType: FunctionOrType | undefined;
-} | {
-  readonly type: "editorIcon";
-} | {
-  readonly type: "editorScript";
-} | {
-  readonly type: "editorAssetNotFound";
-} | {
-  readonly type: "apiRequest";
-  readonly expr: RequestExpr;
-};
+export type CommectionRequest<RequestExpr> =
+  | {
+      readonly type: "editorHtml";
+      readonly functionOrType: FunctionOrType | undefined;
+    }
+  | {
+      readonly type: "editorOgpImage";
+      readonly functionOrType: FunctionOrType | undefined;
+    }
+  | {
+      readonly type: "editorIcon";
+    }
+  | {
+      readonly type: "editorScript";
+    }
+  | {
+      readonly type: "editorAssetNotFound";
+    }
+  | {
+      readonly type: "apiRequest";
+      readonly expr: RequestExpr;
+    };
 
 export type FunctionOrType = Function | Type;
 
@@ -32,8 +34,23 @@ export type Type = {
   readonly arguments: ReadonlyArray<Type>;
 };
 
-export type CommectionResponse = {};
+export type CommectionResponse = {
+  readonly type: "editorHtml";
+  readonly html: string;
+};
 
-export type RequestParseResult<RequestExpr> = CommectionRequest<RequestExpr> | {
-  readonly type: "skip";
-} | { readonly type: "error" };
+export type RequestParseResult<RequestExpr> =
+  | CommectionRequest<RequestExpr>
+  | {
+      readonly type: "skip";
+    }
+  | { readonly type: "error" };
+
+export const handleRequest = <RequestExpr>(
+  request: CommectionRequest<RequestExpr>
+): CommectionResponse => {
+  return {
+    type: "editorHtml",
+    html: "wip",
+  };
+};

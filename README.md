@@ -2,6 +2,12 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/narumincho/commection)
 
+## Deno Example
+
+```sh
+deno run --allow-net=:8000 ./deno/example/main.ts
+```
+
 ## Editor build command
 
 ```sh
