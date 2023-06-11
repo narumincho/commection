@@ -2,26 +2,21 @@ import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
 import { SimpleRequest } from "../simpleHttpType/request.ts";
 import { Schema } from "./main.ts";
 import { FunctionOrType, RequestParseResult } from "./server.ts";
+import dist from "../dist.json" assert { type: "json" };
 
-export const simpleRequestToCommectionRequest = <RequestExpr>(
-  parameter: {
-    readonly simpleRequest: SimpleRequest;
-    readonly schema: Schema<RequestExpr>;
-    readonly pathPrefix: ReadonlyArray<string>;
-    readonly requestExprParser: (
-      path: string,
-    ) => RequestExpr | undefined;
-    readonly scriptHash: string;
-    readonly iconHash: string;
-  },
-): RequestParseResult<RequestExpr> => {
+export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
+  readonly simpleRequest: SimpleRequest;
+  readonly schema: Schema<RequestExpr>;
+  readonly pathPrefix: ReadonlyArray<string>;
+  readonly requestExprParser: (path: string) => RequestExpr | undefined;
+}): RequestParseResult<RequestExpr> => {
   if (parameter.simpleRequest === undefined) {
     return { type: "skip" };
   }
 
   const pathListRemovePrefix = stringArrayMatchPrefix(
     parameter.simpleRequest.url.pathSegments,
-    parameter.pathPrefix,
+    parameter.pathPrefix
   );
   // /
   if (pathListRemovePrefix === undefined) {
@@ -50,23 +45,17 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(
   ]);
   if (editorAssetsSuffix !== undefined) {
     // /{prefix}/editor-assets/icon-hash.png
-    if (
-      stringArrayEqual(editorAssetsSuffix, [`icon-${parameter.iconHash}.png`])
-    ) {
+    if (stringArrayEqual(editorAssetsSuffix, [`icon-${dist.iconHash}.png`])) {
       return { type: "editorIcon" };
     }
     // /{prefix}/editor-assets/script-hash.js
     if (
-      stringArrayEqual(editorAssetsSuffix, [
-        `script-${parameter.scriptHash}.js`,
-      ])
+      stringArrayEqual(editorAssetsSuffix, [`script-${dist.scriptHash}.js`])
     ) {
       return { type: "editorScript" };
     }
     // /{prefix}/editor-assets/ogp/
-    const ogpSuffix = stringArrayMatchPrefix(editorAssetsSuffix, [
-      "ogp",
-    ]);
+    const ogpSuffix = stringArrayMatchPrefix(editorAssetsSuffix, ["ogp"]);
     if (ogpSuffix !== undefined) {
       return {
         type: "editorOgpImage",
@@ -77,9 +66,7 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(
   }
 
   // /{prefix}/api/{functionName}
-  const apiSuffix = stringArrayMatchPrefix(pathListRemovePrefix, [
-    "api",
-  ]);
+  const apiSuffix = stringArrayMatchPrefix(pathListRemovePrefix, ["api"]);
   if (apiSuffix !== undefined) {
     const expr = parameter.requestExprParser("wip");
     if (expr === undefined) {
@@ -97,12 +84,10 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(
 };
 
 const getFunctionOrTypeFromSubPath = (
-  subPath: ReadonlyArray<string>,
+  subPath: ReadonlyArray<string>
 ): FunctionOrType | undefined => {
   // ./function/{functionId}/{arguments}?{argumentsKey=argumentsValue}
-  const functionSuffix = stringArrayMatchPrefix(subPath, [
-    "function",
-  ]);
+  const functionSuffix = stringArrayMatchPrefix(subPath, ["function"]);
   if (functionSuffix) {
     const functionId = functionSuffix[0];
     return functionId === undefined
@@ -110,9 +95,7 @@ const getFunctionOrTypeFromSubPath = (
       : { type: "function", functionId, arguments: [] };
   }
   // ./type/{typeId}/{arguments}?{argumentsKey=argumentsValue}
-  const typeSuffix = stringArrayMatchPrefix(subPath, [
-    "type",
-  ]);
+  const typeSuffix = stringArrayMatchPrefix(subPath, ["type"]);
   if (typeSuffix) {
     const typeId = typeSuffix[0];
     return typeId === undefined

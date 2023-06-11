@@ -1,4 +1,5 @@
 import { StructuredHtml } from "../html/data.ts";
+import dist from "../dist.json" assert { type: "json" };
 
 export type CommectionRequest<RequestExpr> =
   | {
@@ -36,10 +37,17 @@ export type Type = {
   readonly arguments: ReadonlyArray<Type>;
 };
 
-export type CommectionResponse = {
-  readonly type: "editorHtml";
-  readonly html: StructuredHtml;
-};
+export type CommectionResponse =
+  | {
+      readonly type: "editorHtml";
+      readonly html: StructuredHtml;
+    }
+  | {
+      readonly type: "editorIcon";
+    }
+  | {
+      readonly type: "editorScript";
+    };
 
 export type RequestParseResult<RequestExpr> =
   | CommectionRequest<RequestExpr>
@@ -62,7 +70,20 @@ export const handleRequest = <RequestExpr>(parameter: {
       ietfLanguageTag: "en",
       twitterCard: "SummaryCard",
       coverImageUrl: new URL(parameter.origin + "/cover.png"),
-      iconUrl: new URL(parameter.origin + "/icon.png"),
+      iconUrl: new URL(
+        parameter.origin +
+          `/${parameter.pathPrefix.join("/")}/editor-assets/icon-${
+            dist.iconHash
+          }.png`
+      ),
+      scriptUrlList: [
+        new URL(
+          parameter.origin +
+            `/${parameter.pathPrefix.join("/")}/editor-assets/icon-${
+              dist.scriptHash
+            }.js`
+        ),
+      ],
       themeColor: undefined,
       url: undefined,
       children: [],

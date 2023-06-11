@@ -3,13 +3,16 @@ import { denoPlugins } from "https://deno.land/x/esbuild_deno_loader@0.8.1/mod.t
 import { build as esBuild } from "https://deno.land/x/esbuild@v0.18.0/mod.js";
 import { ensureFile } from "https://deno.land/std@0.191.0/fs/mod.ts";
 import { toHashString } from "https://deno.land/std@0.191.0/crypto/mod.ts";
+import { encode as base64Encode } from "https://deno.land/std@0.191.0/encoding/base64.ts";
 
 type BuildClientResult = {
   readonly scriptHash: string;
   readonly scriptContent: string;
+  readonly iconHash: string;
+  readonly iconBase64Content: string;
 };
 
-const buildClientEditor = async (): Promise<BuildClientResult> => {
+const buildClientScript = async (): Promise<Uint8Array> => {
   const esbuildResult = await esBuild({
     entryPoints: [fromFileUrl(import.meta.resolve("./main.tsx"))],
     plugins: denoPlugins(),
@@ -21,22 +24,30 @@ const buildClientEditor = async (): Promise<BuildClientResult> => {
 
   for (const esbuildResultFile of esbuildResult.outputFiles) {
     if (esbuildResultFile.path === "<stdout>") {
-      const hash = toHashString(
-        await crypto.subtle.digest("SHA-256", esbuildResultFile.contents),
-        "hex"
-      );
-      console.log("js 発見");
-      const scriptContent = new TextDecoder().decode(
-        esbuildResultFile.contents
-      );
-
-      return {
-        scriptHash: hash,
-        scriptContent: scriptContent,
-      };
+      return esbuildResultFile.contents;
     }
   }
   throw new Error("esbuild で <stdout> の出力を取得できなかった...");
+};
+
+const buildClientEditor = async (): Promise<BuildClientResult> => {
+  const scriptContent = await buildClientScript();
+  const iconContent = await Deno.readFile(
+    new URL("./icon.png", import.meta.url)
+  );
+
+  return {
+    scriptHash: toHashString(
+      await crypto.subtle.digest("SHA-256", scriptContent),
+      "hex"
+    ),
+    scriptContent: new TextDecoder().decode(scriptContent),
+    iconHash: toHashString(
+      await crypto.subtle.digest("SHA-256", iconContent),
+      "hex"
+    ),
+    iconBase64Content: base64Encode(iconContent),
+  };
 };
 
 const main = async (): Promise<void> => {

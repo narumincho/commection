@@ -16,8 +16,6 @@ export const heandleCommectionRequest = <RequestExpr>(parameter: {
   }
   const commectionRequest = simpleRequestToCommectionRequest({
     simpleRequest,
-    iconHash: "wip",
-    scriptHash: "wip",
     pathPrefix: parameter.pathPrefix,
     requestExprParser: () => undefined,
     schema: parameter.schema,
