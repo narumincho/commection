@@ -27,3 +27,18 @@ Response(Response)
 
 Request -->|requestToSimpleRequest| SimpleRequest -->|simpleRequestToCommectionRequest| CommectionRequest -->|handleRequest| CommectionResponse -->|commectionResponseToSimpleResponse| SimpleResponse --> |simepleResponseToResponse|Response
 ```
+
+## Upgrade Dependencies
+
+rust
+
+```sh
+cd ./rust
+cargo upgrade
+```
+
+dart
+
+```sh
+dart pub upgrade --major-versions --directory=./dart/commection
+```
