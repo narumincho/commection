@@ -1,7 +1,7 @@
 import { SimpleResponse } from "../simpleHttpType/response.ts";
-import { CommectionResponse } from "./server.ts";
 import dist from "../dist.json" assert { type: "json" };
 import { decode } from "https://deno.land/std@0.191.0/encoding/base64.ts";
+import { CommectionResponse } from "./commectionResponse.ts";
 
 const iconContent = decode(dist.iconBase64Content);
 

@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:commection/html/data.dart';
 import 'package:meta/meta.dart';
 
 @immutable
