@@ -1,15 +1,52 @@
 import { PhantomData } from "../phantom.ts";
+import { requestToSimpleRequest } from "../simpleHttpType/requestToSimpleRequest.ts";
+import { simpleResponseToResponse } from "../simpleHttpType/simepleResponseToResponse.ts";
+import { commectionResponseToSimpleResponse } from "./commectionResponseToSimpleResponse.ts";
+import { handleRequest } from "./server.ts";
+import { simpleRequestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
 
-export type Server<ImplementType, RequestExpr> = {
-  readonly schema: Schema<ImplementType, RequestExpr>;
-  readonly implementation: ImplementType;
+export const heandleCommectionRequest = <RequestExpr>(parameter: {
+  readonly request: Request;
+  readonly schema: Schema<RequestExpr>;
+  readonly pathPrefix: ReadonlyArray<string>;
+}): Response | undefined => {
+  const simpleRequest = requestToSimpleRequest(parameter.request);
+  if (simpleRequest === undefined) {
+    return new Response("Unsupported request", { status: 400 });
+  }
+  const commectionRequest = simpleRequestToCommectionRequest({
+    simpleRequest,
+    pathPrefix: parameter.pathPrefix,
+    requestExprParser: () => undefined,
+    schema: parameter.schema,
+  });
+  if (commectionRequest.type === "skip") {
+    return undefined;
+  }
+  if (commectionRequest.type === "error") {
+    return new Response("Internal Commection Server Error", { status: 500 });
+  }
+  const commectionResponse = handleRequest({
+    request: commectionRequest,
+    origin: simpleRequest.url.origin,
+    pathPrefix: parameter.pathPrefix,
+  });
+  if (commectionResponse === undefined) {
+    return undefined;
+  }
+  const simpleResponse = commectionResponseToSimpleResponse(commectionResponse);
+  const response = simpleResponseToResponse(simpleResponse);
+  return response;
 };
 
-export type Schema<ImplementType, RequestExpr> = {
+export type Server<RequestExpr> = {
+  readonly schema: Schema<RequestExpr>;
+};
+
+export type Schema<RequestExpr> = {
   readonly name: string;
   readonly typeDefinitions: ReadonlyArray<TypeDefinition>;
   readonly functionDefinitions: ReadonlyArray<FunctionDefinition>;
-  readonly implementType: PhantomData<ImplementType>;
   readonly requestExpr: PhantomData<RequestExpr>;
 };
 
@@ -23,13 +60,15 @@ export type TypeDefinition = {
 
 export type TypeAttribute = "";
 
-export type TypeStructure = {
-  readonly type: "sum";
-  readonly pattern: ReadonlyArray<Pattern>;
-} | {
-  readonly type: "product";
-  readonly fields: ReadonlyArray<Field>;
-};
+export type TypeStructure =
+  | {
+      readonly type: "sum";
+      readonly pattern: ReadonlyArray<Pattern>;
+    }
+  | {
+      readonly type: "product";
+      readonly fields: ReadonlyArray<Field>;
+    };
 
 export type Pattern = {
   readonly type: Type;

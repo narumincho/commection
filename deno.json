@@ -1,0 +1,21 @@
+{
+    "lint": {
+        "exclude": []
+    },
+    "test": {
+        "exclude": []
+    },
+    "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "jsx": "react",
+        "jsxFactory": "React.createElement",
+        "jsxFragmentFactory": "React.Fragment",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "deno.ns",
+            "deno.unstable"
+        ]
+    }
+}

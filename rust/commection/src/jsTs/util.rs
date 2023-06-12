@@ -1,5 +1,5 @@
 use super::data::*;
-use super::identifer;
+use super::identifier;
 
 /// プロパティの値を取得する。getByExprのシンタックスシュガー
 pub fn get(expr: Expr, property_name: &str) -> Expr {
@@ -282,7 +282,7 @@ pub fn logical_or(left: Expr, right: Expr) -> Expr {
  */
 pub fn call_number_method(module_name: &str, parameter_list: Vec<Expr>) -> Expr {
     call_method(
-        Expr::GlobalObjects(identifer::from_string("Number")),
+        Expr::GlobalObjects(identifier::from_string("Number")),
         module_name,
         parameter_list,
     )
@@ -296,7 +296,7 @@ pub fn call_number_method(module_name: &str, parameter_list: Vec<Expr>) -> Expr 
  */
 pub fn call_math_method(method_name: &str, parameter_list: Vec<Expr>) -> Expr {
     call_method(
-        Expr::GlobalObjects(identifer::from_string("Math")),
+        Expr::GlobalObjects(identifier::from_string("Math")),
         method_name,
         parameter_list,
     )
@@ -309,7 +309,7 @@ pub fn call_math_method(method_name: &str, parameter_list: Vec<Expr>) -> Expr {
  */
 pub fn new_date() -> Expr {
     Expr::New(Box::new(CallExpr {
-        expr: Expr::GlobalObjects(identifer::from_string("Date")),
+        expr: Expr::GlobalObjects(identifier::from_string("Date")),
         parameter_list: vec![],
     }))
 }
@@ -321,7 +321,7 @@ pub fn new_date() -> Expr {
  */
 pub fn new_uint8array(length_or_iterable: Expr) -> Expr {
     Expr::New(Box::new(CallExpr {
-        expr: Expr::GlobalObjects(identifer::from_string("Uint8Array")),
+        expr: Expr::GlobalObjects(identifier::from_string("Uint8Array")),
         parameter_list: vec![length_or_iterable],
     }))
 }
@@ -333,7 +333,7 @@ pub fn new_uint8array(length_or_iterable: Expr) -> Expr {
  */
 pub fn new_map(init_key_value_list: Expr) -> Expr {
     Expr::New(Box::new(CallExpr {
-        expr: Expr::GlobalObjects(identifer::from_string("Map")),
+        expr: Expr::GlobalObjects(identifier::from_string("Map")),
         parameter_list: vec![init_key_value_list],
     }))
 }
@@ -345,7 +345,7 @@ pub fn new_map(init_key_value_list: Expr) -> Expr {
  */
 pub fn new_set(init_value_list: Expr) -> Expr {
     Expr::New(Box::new(CallExpr {
-        expr: Expr::GlobalObjects(identifer::from_string("Set")),
+        expr: Expr::GlobalObjects(identifier::from_string("Set")),
         parameter_list: vec![init_value_list],
     }))
 }
@@ -357,7 +357,7 @@ pub fn new_set(init_value_list: Expr) -> Expr {
  */
 pub fn console_log(expr: Expr) -> Statement {
     Statement::EvaluateExpr(call_method(
-        Expr::GlobalObjects(identifer::from_string("console")),
+        Expr::GlobalObjects(identifier::from_string("console")),
         "log",
         vec![expr],
     ))
@@ -368,7 +368,7 @@ pub fn console_log(expr: Expr) -> Statement {
  */
 pub fn array_type(element_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("Array")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("Array")),
         type_parameter_list: vec![element_type],
     }))
 }
@@ -378,7 +378,7 @@ pub fn array_type(element_type: Type) -> Type {
  */
 pub fn readonly_array_type(element_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("ReadonlyArray")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("ReadonlyArray")),
         type_parameter_list: vec![element_type],
     }))
 }
@@ -387,7 +387,7 @@ pub fn readonly_array_type(element_type: Type) -> Type {
  * `Uint8Array`
  */
 pub fn uint8array_type() -> Type {
-    Type::ScopeInGlobal(identifer::from_string("Uint8Array"))
+    Type::ScopeInGlobal(identifier::from_string("Uint8Array"))
 }
 
 /**
@@ -395,7 +395,7 @@ pub fn uint8array_type() -> Type {
  */
 pub fn promise_type(return_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("Promise")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("Promise")),
         type_parameter_list: vec![return_type],
     }))
 }
@@ -404,7 +404,7 @@ pub fn promise_type(return_type: Type) -> Type {
  * `Date`
  */
 pub fn date_type() -> Type {
-    Type::ScopeInGlobal(identifer::from_string("Date"))
+    Type::ScopeInGlobal(identifier::from_string("Date"))
 }
 
 /**
@@ -412,7 +412,7 @@ pub fn date_type() -> Type {
  */
 pub fn map_type(key_type: Type, value_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("Map")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("Map")),
         type_parameter_list: vec![key_type, value_type],
     }))
 }
@@ -422,7 +422,7 @@ pub fn map_type(key_type: Type, value_type: Type) -> Type {
  */
 pub fn readonly_map_type(key_type: Type, value_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("ReadonlyMap")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("ReadonlyMap")),
         type_parameter_list: vec![key_type, value_type],
     }))
 }
@@ -432,7 +432,7 @@ pub fn readonly_map_type(key_type: Type, value_type: Type) -> Type {
  */
 pub fn set_type(element_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("Set")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("Set")),
         type_parameter_list: vec![element_type],
     }))
 }
@@ -442,7 +442,7 @@ pub fn set_type(element_type: Type) -> Type {
  */
 pub fn readonly_set_type(element_type: Type) -> Type {
     Type::WithTypeParameter(Box::new(TypeWithTypeParameter {
-        r#type: Type::ScopeInGlobal(identifer::from_string("ReadonlySet")),
+        r#type: Type::ScopeInGlobal(identifier::from_string("ReadonlySet")),
         type_parameter_list: vec![element_type],
     }))
 }

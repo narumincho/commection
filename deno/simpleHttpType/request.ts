@@ -1,4 +1,3 @@
-import { Lazy } from "../lazy.ts";
 import { StructuredJsonValue } from "../typedJson.ts";
 import { SimpleUrl } from "./url.ts";
 
@@ -20,7 +19,7 @@ export type SimpleRequestOption = {
 export type SimpleRequestPost = {
   readonly method: "post";
   readonly url: SimpleUrl;
-  readonly bodyLazy: Lazy<StructuredJsonValue>;
+  readonly bodyLazy: () => Promise<StructuredJsonValue | undefined>;
 };
 
 export type SimpleRequestHeader = {

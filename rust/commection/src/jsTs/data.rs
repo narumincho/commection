@@ -37,8 +37,8 @@ pub enum ExportDefinition {
 /// ```
 #[derive(PartialEq, Eq, Debug)]
 pub struct TypeAlias {
-    pub name: super::identifer::Identifer,
-    pub type_parameter_list: Vec<super::identifer::Identifer>,
+    pub name: super::identifier::Identifier,
+    pub type_parameter_list: Vec<super::identifier::Identifier>,
     pub document: String,
     pub r#type: Type,
 }
@@ -46,13 +46,13 @@ pub struct TypeAlias {
 #[derive(PartialEq, Eq, Debug)]
 pub struct Function {
     /// 外部に公開する関数の名前
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// ドキュメント
     pub document: String,
 
     /// 型パラメーターのリスト
-    pub type_parameter_list: Vec<super::identifer::Identifer>,
+    pub type_parameter_list: Vec<super::identifier::Identifier>,
 
     /// パラメーター
     pub parameter_list: Vec<ParameterWithDocument>,
@@ -67,7 +67,7 @@ pub struct Function {
 #[derive(PartialEq, Eq, Debug)]
 pub struct ParameterWithDocument {
     /// パラメーター名
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// ドキュメント
     pub document: String,
@@ -80,7 +80,7 @@ pub struct ParameterWithDocument {
 #[derive(PartialEq, Eq, Debug)]
 pub struct Parameter {
     /// パラメーター名
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// パラメーターの型
     pub r#type: Type,
@@ -90,7 +90,7 @@ pub struct Parameter {
 #[derive(PartialEq, Eq, Debug)]
 pub struct Variable {
     /// 変数の名前
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// ドキュメント
     pub document: String,
@@ -147,8 +147,8 @@ pub enum Expr {
     ArrayLiteral(Box<Vec<ArrayItem>>),
     ObjectLiteral(Box<Vec<Member>>),
     Lambda(Box<LambdaExpr>),
-    Variable(super::identifer::Identifer),
-    GlobalObjects(super::identifer::Identifer),
+    Variable(super::identifier::Identifier),
+    GlobalObjects(super::identifier::Identifier),
     ImportedVariable(ImportedVariable),
     Get(Box<GetExpr>),
     Call(Box<CallExpr>),
@@ -190,8 +190,8 @@ pub enum Type {
     Union(Box<Vec<Type>>),
     Intersection(Box<IntersectionType>),
     ImportedType(ImportedType),
-    ScopeInFile(super::identifer::Identifer),
-    ScopeInGlobal(super::identifer::Identifer),
+    ScopeInFile(super::identifier::Identifier),
+    ScopeInGlobal(super::identifier::Identifier),
     StringLiteral(String),
 }
 /// 単項演算子と適用される式
@@ -261,7 +261,7 @@ pub struct LambdaExpr {
     pub parameter_list: Vec<Parameter>,
 
     /// 型パラメーターのリスト
-    pub type_parameter_list: Vec<super::identifer::Identifer>,
+    pub type_parameter_list: Vec<super::identifier::Identifier>,
 
     /// 戻り値の型
     pub return_type: Type,
@@ -276,7 +276,7 @@ pub struct ImportedVariable {
     pub module_name: String,
 
     /// 変数名
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 }
 /// プロパティアクセス
 #[derive(PartialEq, Eq, Debug)]
@@ -334,7 +334,7 @@ pub struct IfStatement {
 #[derive(PartialEq, Eq, Debug)]
 pub struct VariableDefinitionStatement {
     /// 変数名
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// 変数の型
     pub r#type: Type,
@@ -350,10 +350,10 @@ pub struct VariableDefinitionStatement {
 #[derive(PartialEq, Eq, Debug)]
 pub struct FunctionDefinitionStatement {
     /// 変数名
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 
     /// 型パラメーターのリスト
-    pub type_parameter_list: Vec<super::identifer::Identifer>,
+    pub type_parameter_list: Vec<super::identifier::Identifier>,
 
     /// パラメーターのリスト
     pub parameter_list: Vec<ParameterWithDocument>,
@@ -369,7 +369,7 @@ pub struct FunctionDefinitionStatement {
 #[derive(PartialEq, Eq, Debug)]
 pub struct ForStatement {
     /// カウンタ変数名
-    pub counter_variable_name: super::identifer::Identifer,
+    pub counter_variable_name: super::identifier::Identifier,
 
     /// ループの上限の式
     pub until_expr: Expr,
@@ -382,7 +382,7 @@ pub struct ForStatement {
 #[derive(PartialEq, Eq, Debug)]
 pub struct ForOfStatement {
     /// 要素の変数名
-    pub element_variable_name: super::identifer::Identifer,
+    pub element_variable_name: super::identifier::Identifier,
 
     /// 繰り返す対象
     pub iterable_expr: Expr,
@@ -431,7 +431,7 @@ pub struct MemberType {
 #[derive(PartialEq, Eq, Debug)]
 pub struct FunctionType {
     /// 型パラメーターのリスト
-    pub type_parameter_list: Vec<super::identifer::Identifer>,
+    pub type_parameter_list: Vec<super::identifier::Identifier>,
 
     /// パラメーターの型. 意味のない引数名は適当に付く
     pub parameter_list: Vec<Type>,
@@ -467,5 +467,5 @@ pub struct ImportedType {
     pub module_name: String,
 
     /// 型の名前
-    pub name: super::identifer::Identifer,
+    pub name: super::identifier::Identifier,
 }

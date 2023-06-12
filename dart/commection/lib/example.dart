@@ -2,14 +2,14 @@ import 'package:meta/meta.dart';
 
 @immutable
 sealed class RequestExpr<T> {
-  Future<T> evaluate(Impliment impliment);
+  Future<T> evaluate(Implement implement);
 }
 
 @immutable
 final class Hello implements RequestExpr<String> {
   @override
-  Future<String> evaluate(Impliment impliment) {
-    return impliment.hello();
+  Future<String> evaluate(Implement implement) {
+    return implement.hello();
   }
 }
 
@@ -20,7 +20,7 @@ final class TextLiteral implements RequestExpr<String> {
   final String value;
 
   @override
-  Future<String> evaluate(Impliment impliment) async {
+  Future<String> evaluate(Implement implement) async {
     return value;
   }
 }
@@ -33,8 +33,8 @@ final class TextJoin implements RequestExpr<String> {
   final RequestExpr<String> right;
 
   @override
-  Future<String> evaluate(Impliment impliment) async {
-    return (await left.evaluate(impliment)) + (await right.evaluate(impliment));
+  Future<String> evaluate(Implement implement) async {
+    return (await left.evaluate(implement)) + (await right.evaluate(implement));
   }
 }
 
@@ -45,8 +45,8 @@ final class TextIsEmpty implements RequestExpr<bool> {
   final RequestExpr<String> expr;
 
   @override
-  Future<bool> evaluate(Impliment impliment) async {
-    return (await expr.evaluate(impliment)).isEmpty;
+  Future<bool> evaluate(Implement implement) async {
+    return (await expr.evaluate(implement)).isEmpty;
   }
 }
 
@@ -63,11 +63,11 @@ final class If<T> implements RequestExpr<T> {
   final RequestExpr<T> elseExpr;
 
   @override
-  Future<T> evaluate(Impliment impliment) async {
-    if (await condition.evaluate(impliment)) {
-      return thenExpr.evaluate(impliment);
+  Future<T> evaluate(Implement implement) async {
+    if (await condition.evaluate(implement)) {
+      return thenExpr.evaluate(implement);
     }
-    return elseExpr.evaluate(impliment);
+    return elseExpr.evaluate(implement);
   }
 }
 
@@ -84,12 +84,12 @@ final class OptionalMatch<T, R> implements RequestExpr<R> {
   final RequestExpr<R> noneExpr;
 
   @override
-  Future<R> evaluate(Impliment impliment) async {
-    final optionalEvaluted = await optional.evaluate(impliment);
+  Future<R> evaluate(Implement implement) async {
+    final optionalEvaluted = await optional.evaluate(implement);
     if (optionalEvaluted == null) {
-      return noneExpr.evaluate(impliment);
+      return noneExpr.evaluate(implement);
     }
-    return someExpr(Literal(optionalEvaluted)).evaluate(impliment);
+    return someExpr(Literal(optionalEvaluted)).evaluate(implement);
   }
 }
 
@@ -100,14 +100,14 @@ final class Literal<T> implements RequestExpr<T> {
   final T value;
 
   @override
-  Future<T> evaluate(Impliment impliment) async {
+  Future<T> evaluate(Implement implement) async {
     return value;
   }
 }
 
 @immutable
-final class Impliment {
-  Impliment({
+final class Implement {
+  Implement({
     required this.hello,
   });
 

@@ -1,5 +1,5 @@
 mod data;
-mod identifer;
+mod identifier;
 mod to_string;
 mod util;
 
@@ -7,7 +7,7 @@ mod util;
 mod tests {
 
     use super::data;
-    use super::identifer;
+    use super::identifier;
     use super::to_string;
     use super::util;
 
@@ -15,31 +15,31 @@ mod tests {
     fn code() {
         let sample = data::Code {
             export_definition_list: vec![data::ExportDefinition::Function(data::Function {
-                name: identifer::from_string("sampleServerFunction"),
+                name: identifier::from_string("sampleServerFunction"),
                 document: String::from("ミドルウェア"),
                 type_parameter_list: vec![],
                 parameter_list: vec![
                     data::ParameterWithDocument {
-                        name: identifer::from_string("request"),
+                        name: identifier::from_string("request"),
                         document: String::from("リクエスト"),
                         r#type: data::Type::ImportedType(data::ImportedType {
                             module_name: String::from("express"),
-                            name: identifer::from_string("Request"),
+                            name: identifier::from_string("Request"),
                         }),
                     },
                     data::ParameterWithDocument {
-                        name: identifer::from_string("response"),
+                        name: identifier::from_string("response"),
                         document: String::from("レスポンス"),
                         r#type: data::Type::ImportedType(data::ImportedType {
                             module_name: String::from("express"),
-                            name: identifer::from_string("Response"),
+                            name: identifier::from_string("Response"),
                         }),
                     },
                 ],
                 return_type: data::Type::Void,
                 statement_list: vec![
                     data::Statement::VariableDefinition(data::VariableDefinitionStatement {
-                        name: identifer::from_string("accept"),
+                        name: identifier::from_string("accept"),
                         r#type: data::Type::Union(Box::new(vec![
                             data::Type::String,
                             data::Type::Undefined,
@@ -47,7 +47,7 @@ mod tests {
                         is_const: true,
                         expr: util::get(
                             util::get(
-                                data::Expr::Variable(identifer::from_string("request")),
+                                data::Expr::Variable(identifier::from_string("request")),
                                 "headers",
                             ),
                             "accept",
@@ -56,18 +56,18 @@ mod tests {
                     data::Statement::If(data::IfStatement {
                         condition: (util::logical_and(
                             util::not_equal(
-                                data::Expr::Variable(identifer::from_string("accept")),
+                                data::Expr::Variable(identifier::from_string("accept")),
                                 data::Expr::UndefinedLiteral,
                             ),
                             util::call_method(
-                                data::Expr::Variable(identifer::from_string("accept")),
+                                data::Expr::Variable(identifier::from_string("accept")),
                                 "includes",
                                 vec![data::Expr::StringLiteral(String::from("text/html"))],
                             ),
                         )),
                         then_statement_list: vec![data::Statement::EvaluateExpr(
                             util::call_method(
-                                data::Expr::Variable(identifer::from_string("response")),
+                                data::Expr::Variable(identifier::from_string("response")),
                                 "setHeader",
                                 vec![
                                     data::Expr::StringLiteral(String::from("content-type")),
@@ -106,31 +106,31 @@ mod tests {
         data::Code {
             export_definition_list: vec![
                 data::ExportDefinition::Function(data::Function {
-                    name: identifer::from_string("middleware"),
+                    name: identifier::from_string("middleware"),
                     document: String::from("ミドルウェア"),
                     type_parameter_list: vec![],
                     parameter_list: vec![
                         data::ParameterWithDocument {
-                            name: identifer::from_string("request"),
+                            name: identifier::from_string("request"),
                             document: String::from("リクエスト"),
                             r#type: data::Type::ImportedType(data::ImportedType {
                                 module_name: String::from("express"),
-                                name: identifer::from_string("Request"),
+                                name: identifier::from_string("Request"),
                             }),
                         },
                         data::ParameterWithDocument {
-                            name: identifer::from_string("response"),
+                            name: identifier::from_string("response"),
                             document: String::from("レスポンス"),
                             r#type: data::Type::ImportedType(data::ImportedType {
                                 module_name: String::from("express"),
-                                name: identifer::from_string("Response"),
+                                name: identifier::from_string("Response"),
                             }),
                         },
                     ],
                     return_type: data::Type::Void,
                     statement_list: vec![
                         data::Statement::VariableDefinition(data::VariableDefinitionStatement {
-                            name: identifer::from_string("accept"),
+                            name: identifier::from_string("accept"),
                             r#type: data::Type::Union(Box::new(vec![
                                 data::Type::String,
                                 data::Type::Undefined,
@@ -138,7 +138,7 @@ mod tests {
                             is_const: true,
                             expr: util::get(
                                 util::get(
-                                    data::Expr::Variable(identifer::from_string("request")),
+                                    data::Expr::Variable(identifier::from_string("request")),
                                     "headers",
                                 ),
                                 "accept",
@@ -147,18 +147,18 @@ mod tests {
                         data::Statement::If(data::IfStatement {
                             condition: (util::logical_and(
                                 util::not_equal(
-                                    data::Expr::Variable(identifer::from_string("accept")),
+                                    data::Expr::Variable(identifier::from_string("accept")),
                                     data::Expr::UndefinedLiteral,
                                 ),
                                 util::call_method(
-                                    data::Expr::Variable(identifer::from_string("accept")),
+                                    data::Expr::Variable(identifier::from_string("accept")),
                                     "includes",
                                     vec![data::Expr::StringLiteral(String::from("text/html"))],
                                 ),
                             )),
                             then_statement_list: vec![data::Statement::EvaluateExpr(
                                 util::call_method(
-                                    data::Expr::Variable(identifer::from_string("response")),
+                                    data::Expr::Variable(identifier::from_string("response")),
                                     "setHeader",
                                     vec![
                                         data::Expr::StringLiteral(String::from("content-type")),
@@ -170,18 +170,18 @@ mod tests {
                     ],
                 }),
                 data::ExportDefinition::Function(data::Function {
-                    name: identifer::from_string("getZeroIndexElement"),
+                    name: identifier::from_string("getZeroIndexElement"),
                     document: String::from("Uint8Arrayの0番目の要素を取得する"),
                     type_parameter_list: vec![],
                     parameter_list: vec![data::ParameterWithDocument {
-                        name: identifer::from_string("array"),
+                        name: identifier::from_string("array"),
                         document: String::from("Uint8Array"),
                         r#type: util::uint8array_type(),
                     }],
                     return_type: data::Type::Number,
                     statement_list: vec![data::Statement::Return(data::Expr::Get(Box::new(
                         data::GetExpr {
-                            expr: data::Expr::Variable(identifer::from_string("array")),
+                            expr: data::Expr::Variable(identifier::from_string("array")),
                             property_expr: data::Expr::NumberLiteral(0),
                         },
                     )))],
@@ -189,12 +189,12 @@ mod tests {
             ],
             statement_list: vec![
                 data::Statement::VariableDefinition(data::VariableDefinitionStatement {
-                    name: identifer::from_string("sorena"),
+                    name: identifier::from_string("sorena"),
                     is_const: false,
                     r#type: data::Type::String,
                     expr: data::Expr::StringLiteral(String::from("それな")),
                 }),
-                util::console_log(data::Expr::Variable(identifer::from_string("sorena"))),
+                util::console_log(data::Expr::Variable(identifier::from_string("sorena"))),
             ],
         }
     }
