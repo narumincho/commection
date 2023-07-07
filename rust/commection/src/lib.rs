@@ -1,6 +1,7 @@
 mod dart;
 mod example;
 mod js_ts;
+mod list_util;
 mod simple_http_type;
 
 pub struct Schema {

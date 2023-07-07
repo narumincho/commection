@@ -11,10 +11,24 @@ pub struct Code {
     pub declaration_list: Vec<Declaration>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, PartialOrd)]
 pub struct ImportPackageAndFileName {
     pub package_and_file_name: NonEmptyString,
     pub as_name: Option<NonEmptyString>,
+}
+
+impl Ord for ImportPackageAndFileName {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        let self_is_local = self.package_and_file_name.to_string().starts_with("./");
+        let other_is_local = other.package_and_file_name.to_string().starts_with("./");
+        if self_is_local && !other_is_local {
+            return std::cmp::Ordering::Less;
+        }
+        if !self_is_local && other_is_local {
+            return std::cmp::Ordering::Greater;
+        }
+        return self.package_and_file_name.cmp(&other.package_and_file_name);
+    }
 }
 
 #[derive(Debug)]
@@ -32,7 +46,12 @@ pub struct ClassDeclaration {
 }
 
 #[derive(Debug)]
-pub struct Field {}
+pub struct Field {
+    pub name: NonEmptyString,
+    pub documentation_comments: String,
+    pub type_: Type,
+    pub parameter_pattern: ParameterPattern,
+}
 
 #[derive(Debug)]
 pub enum ClassModifier {
@@ -42,7 +61,48 @@ pub enum ClassModifier {
 }
 
 #[derive(Debug)]
-pub struct EnumDeclaration {}
+pub struct EnumDeclaration {
+    pub name: NonEmptyString,
+    pub documentation_comments: String,
+    pub enum_values: Vec<EnumValue>,
+    pub implements_class_list: Vec<NonEmptyString>,
+    pub methods: Vec<Method>,
+}
+
+#[derive(Debug)]
+pub struct Method {
+    pub name: NonEmptyString,
+    pub documentation_comments: String,
+    pub return_type: Type,
+    pub parameters: Vec<Parameter>,
+    pub method_type: MethodType,
+    pub statements: Vec<Statement>,
+    pub is_async: bool,
+    pub type_parameters: Vec<NonEmptyString>,
+    pub is_getter: bool,
+    pub use_result_annotation: bool,
+}
+
+#[derive(Debug)]
+pub struct Parameter {
+    pub name: NonEmptyString,
+    pub type_: Type,
+    pub parameter_pattern: ParameterPattern,
+}
+
+#[derive(Debug)]
+pub enum ParameterPattern {
+    Positional,
+    Named,
+    NamedWithDefault(Expr),
+}
+
+#[derive(Debug)]
+pub enum MethodType {
+    Normal,
+    Override,
+    Static,
+}
 
 #[derive(Debug)]
 pub enum Expr {
@@ -65,8 +125,8 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub struct EnumValue {
-    pub type_name: String,
-    pub value: String,
+    pub type_name: NonEmptyString,
+    pub value: NonEmptyString,
 }
 
 #[derive(Debug)]
