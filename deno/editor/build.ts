@@ -53,10 +53,16 @@ const buildClientEditor = async (): Promise<BuildClientResult> => {
 const main = async (): Promise<void> => {
   const clientBuildResult = await buildClientEditor();
   console.log("clientEditor のビルドデータ生成完了");
-  await writeTextFileWithLog(
-    new URL("../dist.json", import.meta.url),
-    JSON.stringify(clientBuildResult)
-  );
+  await Promise.all([
+    writeTextFileWithLog(
+      new URL("../dist.json", import.meta.url),
+      JSON.stringify(clientBuildResult)
+    ),
+    writeTextFileWithLog(
+      new URL("../dart/commection/editor_dist.dart", import.meta.url),
+      `dartのコード生成したい`
+    ),
+  ]);
   console.log("ファイルに保存した");
   Deno.exit();
 };

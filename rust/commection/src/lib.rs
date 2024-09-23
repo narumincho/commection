@@ -1,6 +1,8 @@
+mod dart;
 mod example;
-mod jsTs;
-mod simpleHttpType;
+mod js_ts;
+mod list_util;
+mod simple_http_type;
 
 pub struct Schema {
     pub name: String,

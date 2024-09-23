@@ -1,6 +1,7 @@
 import { StructuredHtml } from "../html/data.ts";
 import dist from "../dist.json" assert { type: "json" };
 import { div } from "../html/interface.ts";
+import { CommectionResponse } from "./commectionResponse.ts";
 
 export type CommectionRequest<RequestExpr> =
   | {
@@ -37,18 +38,6 @@ export type Type = {
   readonly typeId: string;
   readonly arguments: ReadonlyArray<Type>;
 };
-
-export type CommectionResponse =
-  | {
-      readonly type: "editorHtml";
-      readonly html: StructuredHtml;
-    }
-  | {
-      readonly type: "editorIcon";
-    }
-  | {
-      readonly type: "editorScript";
-    };
 
 export type RequestParseResult<RequestExpr> =
   | CommectionRequest<RequestExpr>
