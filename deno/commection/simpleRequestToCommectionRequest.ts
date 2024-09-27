@@ -2,7 +2,7 @@ import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
 import { SimpleRequest } from "../simpleHttpType/request.ts";
 import { Schema } from "./main.ts";
 import { FunctionOrType, RequestParseResult } from "./server.ts";
-import dist from "../dist.json" assert { type: "json" };
+import dist from "../dist.json" with { type: "json" };
 
 export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
   readonly simpleRequest: SimpleRequest;

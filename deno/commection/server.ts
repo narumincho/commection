@@ -1,5 +1,5 @@
 import { StructuredHtml } from "../html/data.ts";
-import dist from "../dist.json" assert { type: "json" };
+import dist from "../dist.json" with { type: "json" };
 import { div } from "../html/interface.ts";
 import { CommectionResponse } from "./commectionResponse.ts";
 
