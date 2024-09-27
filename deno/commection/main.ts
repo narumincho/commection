@@ -2,7 +2,7 @@ import { PhantomData } from "../phantom.ts";
 import { requestToSimpleRequest } from "../simpleHttpType/requestToSimpleRequest.ts";
 import { simpleResponseToResponse } from "../simpleHttpType/simepleResponseToResponse.ts";
 import { commectionResponseToSimpleResponse } from "./commectionResponseToSimpleResponse.ts";
-import { handleRequest } from "./server.ts";
+import { handleRequest } from "./server.tsx";
 import { simpleRequestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
 
 export const heandleCommectionRequest = <RequestExpr>(parameter: {

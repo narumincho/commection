@@ -1,7 +1,7 @@
 import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
 import { SimpleRequest } from "../simpleHttpType/request.ts";
 import { Schema } from "./main.ts";
-import { FunctionOrType, RequestParseResult } from "./server.ts";
+import { FunctionOrType, RequestParseResult } from "./server.tsx";
 import dist from "../dist.json" with { type: "json" };
 
 export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
@@ -16,7 +16,7 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
 
   const pathListRemovePrefix = stringArrayMatchPrefix(
     parameter.simpleRequest.url.pathSegments,
-    parameter.pathPrefix
+    parameter.pathPrefix,
   );
   // /
   if (pathListRemovePrefix === undefined) {
@@ -84,7 +84,7 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
 };
 
 const getFunctionOrTypeFromSubPath = (
-  subPath: ReadonlyArray<string>
+  subPath: ReadonlyArray<string>,
 ): FunctionOrType | undefined => {
   // ./function/{functionId}/{arguments}?{argumentsKey=argumentsValue}
   const functionSuffix = stringArrayMatchPrefix(subPath, ["function"]);
