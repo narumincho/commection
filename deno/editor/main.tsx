@@ -1,10 +1,7 @@
-import React from "https://esm.sh/react@18.2.0?pin=v124";
-import { createRoot } from "https://esm.sh/react-dom@18.2.0/client?pin=v124";
-import { styled } from 'https://esm.sh/@stitches/react@1.2.8?pin=v124';
-
-const StyledDiv = styled('div', {
-  background: "SkyBlue"
-});
+// @ts-types="https://esm.sh/react@18.3.1"
+import React from "npm:react";
+// @ts-types="https://esm.sh/react-dom@18.3.1/client"
+import { createRoot } from "npm:react-dom/client";
 
 /**
  * commection のエディターを動かす
@@ -22,8 +19,8 @@ export const startEditor = (): void => {
     rootElement,
   ).render(
     <React.StrictMode>
-      <div>やっぱhtmlのbodyはSSRしなくても良いや
-        <StyledDiv>スタイルテスト</StyledDiv>
+      <div>
+        APIドキュメントはSSRするのが理想だな. データはSSRしないほうが良い
       </div>
     </React.StrictMode>,
   );
