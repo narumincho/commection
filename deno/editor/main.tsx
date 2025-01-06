@@ -1,6 +1,6 @@
-// @ts-types="https://esm.sh/react@18.3.1"
+// @ts-types="npm:@types/react"
 import React from "npm:react";
-// @ts-types="https://esm.sh/react-dom@18.3.1/client"
+// @ts-types="npm:@types/react-dom/client"
 import { createRoot } from "npm:react-dom/client";
 
 /**

@@ -1,8 +1,8 @@
 import dist from "../dist.json" with { type: "json" };
 import { CommectionResponse } from "./commectionResponse.ts";
-// @ts-types="https://esm.sh/react@18.3.1"
+// @ts-types="npm:@types/react"
 import React from "npm:react";
-// @ts-types="https://esm.sh/react-dom@18.3.1/server"
+// @ts-types="npm:@types/react-dom/server"
 import { renderToString } from "npm:react-dom/server";
 
 export type CommectionRequest<RequestExpr> =
