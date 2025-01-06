@@ -1,8 +1,7 @@
-import { structuredHtmlToString } from "../html/toString.ts";
 import { SimpleResponse, SimpleResponseBody } from "./response.ts";
 
 export const simpleResponseToResponse = (
-  simpleResponse: SimpleResponse
+  simpleResponse: SimpleResponse,
 ): Response => {
   switch (simpleResponse.status) {
     case "ok":
@@ -17,13 +16,11 @@ export const simpleResponseToResponse = (
 };
 
 const simpleResponseBodyToBody = (
-  simpleResponseBody: SimpleResponseBody
+  simpleResponseBody: SimpleResponseBody,
 ): Uint8Array => {
   switch (simpleResponseBody.type) {
     case "html":
-      return new TextEncoder().encode(
-        structuredHtmlToString(simpleResponseBody.html)
-      );
+      return new TextEncoder().encode(simpleResponseBody.html);
     case "png":
       return simpleResponseBody.png;
     case "js":
@@ -32,7 +29,7 @@ const simpleResponseBodyToBody = (
 };
 
 const simpleResponseBodyToContentType = (
-  simpleResponseBody: SimpleResponseBody
+  simpleResponseBody: SimpleResponseBody,
 ): string => {
   switch (simpleResponseBody.type) {
     case "html":

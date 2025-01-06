@@ -1,9 +1,8 @@
-import { fromFileUrl } from "https://deno.land/std@0.191.0/path/posix.ts";
-import { denoPlugins } from "https://deno.land/x/esbuild_deno_loader@0.8.1/mod.ts";
-import { build as esBuild } from "https://deno.land/x/esbuild@v0.18.0/mod.js";
-import { ensureFile } from "https://deno.land/std@0.191.0/fs/mod.ts";
-import { toHashString } from "https://deno.land/std@0.191.0/crypto/mod.ts";
-import { encode as base64Encode } from "https://deno.land/std@0.191.0/encoding/base64.ts";
+import { fromFileUrl } from "jsr:@std/path";
+import { denoPlugins } from "jsr:@luca/esbuild-deno-loader";
+import { build as esBuild, stop } from "npm:esbuild";
+import { ensureFile } from "jsr:@std/fs";
+import { encodeBase64, encodeHex } from "jsr:@std/encoding";
 
 type BuildClientResult = {
   readonly scriptHash: string;
@@ -33,43 +32,35 @@ const buildClientScript = async (): Promise<Uint8Array> => {
 const buildClientEditor = async (): Promise<BuildClientResult> => {
   const scriptContent = await buildClientScript();
   const iconContent = await Deno.readFile(
-    new URL("./icon.png", import.meta.url)
+    new URL("./icon.png", import.meta.url),
   );
 
   return {
-    scriptHash: toHashString(
+    scriptHash: encodeHex(
       await crypto.subtle.digest("SHA-256", scriptContent),
-      "hex"
     ),
     scriptContent: new TextDecoder().decode(scriptContent),
-    iconHash: toHashString(
+    iconHash: encodeHex(
       await crypto.subtle.digest("SHA-256", iconContent),
-      "hex"
     ),
-    iconBase64Content: base64Encode(iconContent),
+    iconBase64Content: encodeBase64(iconContent),
   };
 };
 
 const main = async (): Promise<void> => {
   const clientBuildResult = await buildClientEditor();
   console.log("clientEditor のビルドデータ生成完了");
-  await Promise.all([
-    writeTextFileWithLog(
-      new URL("../dist.json", import.meta.url),
-      JSON.stringify(clientBuildResult)
-    ),
-    writeTextFileWithLog(
-      new URL("../dart/commection/editor_dist.dart", import.meta.url),
-      `dartのコード生成したい`
-    ),
-  ]);
+  await writeTextFileWithLog(
+    new URL("../dist.json", import.meta.url),
+    JSON.stringify(clientBuildResult),
+  );
   console.log("ファイルに保存した");
-  Deno.exit();
+  await stop();
 };
 
 const writeTextFileWithLog = async (
   path: URL,
-  content: string
+  content: string,
 ): Promise<void> => {
   console.log(path.toString() + " に書き込み中... " + content.length + "文字");
   await ensureFile(path);

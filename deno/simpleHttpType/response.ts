@@ -1,24 +1,22 @@
-import { StructuredHtml } from "../html/data.ts";
-
 export type SimpleResponse =
   | {
-      readonly status: "ok";
-      readonly body: SimpleResponseBody;
-    }
+    readonly status: "ok";
+    readonly body: SimpleResponseBody;
+  }
   | {
-      readonly status: "notFoundError";
-    };
+    readonly status: "notFoundError";
+  };
 
 export type SimpleResponseBody =
   | {
-      readonly type: "html";
-      readonly html: StructuredHtml;
-    }
+    readonly type: "html";
+    readonly html: string;
+  }
   | {
-      readonly type: "png";
-      readonly png: Uint8Array;
-    }
+    readonly type: "png";
+    readonly png: Uint8Array;
+  }
   | {
-      readonly type: "js";
-      readonly js: string;
-    };
+    readonly type: "js";
+    readonly js: string;
+  };

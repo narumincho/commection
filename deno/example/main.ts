@@ -1,8 +1,8 @@
-import { serve } from "https://deno.land/std@0.191.0/http/server.ts";
 import { heandleCommectionRequest } from "../commection/main.ts";
 import { createPhantomData } from "../phantom.ts";
 
-serve(
+Deno.serve(
+  { port: 8000 },
   (request) => {
     const response = heandleCommectionRequest({
       request,
@@ -19,5 +19,4 @@ serve(
     }
     return response;
   },
-  { port: 8000 }
 );
