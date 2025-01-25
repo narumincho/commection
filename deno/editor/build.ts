@@ -13,7 +13,7 @@ type BuildClientResult = {
 
 const buildClientScript = async (): Promise<Uint8Array> => {
   const esbuildResult = await esBuild({
-    entryPoints: [fromFileUrl(import.meta.resolve("./main.tsx"))],
+    entryPoints: ["./deno/editor/main.tsx"],
     plugins: denoPlugins(),
     write: false,
     bundle: true,

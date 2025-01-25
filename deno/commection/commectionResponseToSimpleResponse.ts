@@ -1,12 +1,12 @@
 import { SimpleResponse } from "../simpleHttpType/response.ts";
 import dist from "../dist.json" with { type: "json" };
-import { decode } from "https://deno.land/std@0.191.0/encoding/base64.ts";
+import { decodeBase64 } from "jsr:@std/encoding";
 import { CommectionResponse } from "./commectionResponse.ts";
 
-const iconContent = decode(dist.iconBase64Content);
+const iconContent = decodeBase64(dist.iconBase64Content);
 
 export const commectionResponseToSimpleResponse = (
-  commectionResponse: CommectionResponse
+  commectionResponse: CommectionResponse,
 ): SimpleResponse => {
   switch (commectionResponse.type) {
     case "editorHtml":
