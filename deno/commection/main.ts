@@ -1,24 +1,20 @@
 import { PhantomData } from "../phantom.ts";
-import { requestToSimpleRequest } from "../simpleHttpType/requestToSimpleRequest.ts";
-import { simpleResponseToResponse } from "../simpleHttpType/simepleResponseToResponse.ts";
 import { commectionResponseToSimpleResponse } from "./commectionResponseToSimpleResponse.ts";
 import { handleRequest } from "./server.tsx";
-import { simpleRequestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
+import { requestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
 
-export const heandleCommectionRequest = <RequestExpr>(parameter: {
-  readonly request: Request;
-  readonly schema: Schema<RequestExpr>;
-  readonly pathPrefix: ReadonlyArray<string>;
-}): Response | undefined => {
-  const simpleRequest = requestToSimpleRequest(parameter.request);
-  if (simpleRequest === undefined) {
-    return new Response("Unsupported request", { status: 400 });
-  }
-  const commectionRequest = simpleRequestToCommectionRequest({
-    simpleRequest,
-    pathPrefix: parameter.pathPrefix,
+export const heandleCommectionRequest = <RequestExpr>(
+  { request, schema, pathPrefix }: {
+    readonly request: Request;
+    readonly schema: Schema<RequestExpr>;
+    readonly pathPrefix: ReadonlyArray<string>;
+  },
+): Response | undefined => {
+  const commectionRequest = requestToCommectionRequest({
+    request,
+    pathPrefix,
     requestExprParser: () => undefined,
-    schema: parameter.schema,
+    schema,
   });
   if (commectionRequest.type === "skip") {
     return undefined;
@@ -28,8 +24,8 @@ export const heandleCommectionRequest = <RequestExpr>(parameter: {
   }
   const commectionResponse = handleRequest({
     request: commectionRequest,
-    origin: simpleRequest.url.origin,
-    pathPrefix: parameter.pathPrefix,
+    origin: request.url.origin,
+    pathPrefix,
   });
   if (commectionResponse === undefined) {
     return undefined;
@@ -62,13 +58,13 @@ export type TypeAttribute = "";
 
 export type TypeStructure =
   | {
-      readonly type: "sum";
-      readonly pattern: ReadonlyArray<Pattern>;
-    }
+    readonly type: "sum";
+    readonly pattern: ReadonlyArray<Pattern>;
+  }
   | {
-      readonly type: "product";
-      readonly fields: ReadonlyArray<Field>;
-    };
+    readonly type: "product";
+    readonly fields: ReadonlyArray<Field>;
+  };
 
 export type Pattern = {
   readonly type: Type;

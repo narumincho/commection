@@ -1,41 +1,60 @@
 import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
-import { SimpleRequest } from "../simpleHttpType/request.ts";
 import { Schema } from "./main.ts";
 import { FunctionOrType, RequestParseResult } from "./server.tsx";
 import dist from "../dist.json" with { type: "json" };
 
-export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
-  readonly simpleRequest: SimpleRequest;
-  readonly schema: Schema<RequestExpr>;
-  readonly pathPrefix: ReadonlyArray<string>;
-  readonly requestExprParser: (path: string) => RequestExpr | undefined;
-}): RequestParseResult<RequestExpr> => {
-  if (parameter.simpleRequest === undefined) {
-    return { type: "skip" };
-  }
-
-  const pathListRemovePrefix = stringArrayMatchPrefix(
-    parameter.simpleRequest.url.pathSegments,
-    parameter.pathPrefix,
-  );
+export const requestToCommectionRequest = <RequestExpr>(
+  { request, schema, pathPrefix, requestExprParser }: {
+    readonly request: Request;
+    readonly schema: Schema<RequestExpr>;
+    readonly pathPrefix: string;
+    readonly requestExprParser: (path: string) => RequestExpr | undefined;
+  },
+): RequestParseResult<RequestExpr> => {
   // /
-  if (pathListRemovePrefix === undefined) {
+  if (new URLPattern({ pathname: `${pathPrefix}/` }).test(request.url)) {
     return { type: "skip" };
   }
   // /{prefix}
-  if (pathListRemovePrefix.length === 0) {
+  if (new URLPattern({ pathname: `${pathPrefix}/` }).test(request.url)) {
     return { type: "editorHtml", functionOrType: undefined };
   }
 
-  // /{prefix}/editor/{"function" | "type"}/{name?}/{arguments}?{argumentsKey=argumentsValue}
-  const editorSuffix = stringArrayMatchPrefix(pathListRemovePrefix, [
-    "editor",
-    "function",
-  ]);
-  if (editorSuffix !== undefined) {
+  // /{prefix}/editor/function/:name/{arguments}?{argumentsKey=argumentsValue}
+  const editorFunctionPattern = new URLPattern({
+    pathname: `${pathPrefix}/editor/function/:name/:arguments?`,
+  }).exec(request.url);
+
+  if (editorFunctionPattern) {
+    const name = editorFunctionPattern.pathname.groups["name"];
     return {
       type: "editorHtml",
-      functionOrType: getFunctionOrTypeFromSubPath(editorSuffix),
+      functionOrType: name
+        ? {
+          type: "function",
+          functionId: name,
+          arguments: [],
+        }
+        : undefined,
+    };
+  }
+
+  // /{prefix}/editor/function/{name?}/{arguments}?{argumentsKey=argumentsValue}
+  const editorFunctionPattern = new URLPattern({
+    pathname: `${pathPrefix}/editor/function/:name/:arguments?`,
+  }).exec(request.url);
+
+  if (editorFunctionPattern) {
+    const name = editorFunctionPattern.pathname.groups["name"];
+    return {
+      type: "editorHtml",
+      functionOrType: name
+        ? {
+          type: "function",
+          functionId: name,
+          arguments: [],
+        }
+        : undefined,
     };
   }
 
