@@ -1,4 +1,3 @@
-import { fromFileUrl } from "jsr:@std/path";
 import { denoPlugins } from "jsr:@luca/esbuild-deno-loader";
 import { build as esBuild, stop } from "npm:esbuild";
 import { ensureFile } from "jsr:@std/fs";
@@ -29,40 +28,40 @@ const buildClientScript = async (): Promise<Uint8Array> => {
   throw new Error("esbuild で <stdout> の出力を取得できなかった...");
 };
 
-const buildClientEditor = async (): Promise<BuildClientResult> => {
-  const scriptContent = await buildClientScript();
+const main = async (): Promise<void> => {
   const iconContent = await Deno.readFile(
     new URL("./icon.png", import.meta.url),
   );
-
-  return {
-    scriptHash: encodeHex(
-      await crypto.subtle.digest("SHA-256", scriptContent),
-    ),
-    scriptContent: new TextDecoder().decode(scriptContent),
-    iconHash: encodeHex(
-      await crypto.subtle.digest("SHA-256", iconContent),
-    ),
-    iconBase64Content: encodeBase64(iconContent),
-  };
-};
-
-const main = async (): Promise<void> => {
-  const clientBuildResult = await buildClientEditor();
-  console.log("clientEditor のビルドデータ生成完了");
   await writeTextFileWithLog(
-    new URL("../dist.json", import.meta.url),
-    JSON.stringify(clientBuildResult),
+    "./deno/editor/icon.generated.json",
+    JSON.stringify({
+      content: encodeBase64(iconContent),
+      hash: encodeHex(
+        await crypto.subtle.digest("SHA-256", iconContent),
+      ),
+    }),
   );
-  console.log("ファイルに保存した");
+
+  const scriptContent = await buildClientScript();
+
+  await writeTextFileWithLog(
+    "./deno/script.generated.json",
+    JSON.stringify({
+      content: new TextDecoder().decode(scriptContent),
+      hash: encodeHex(
+        await crypto.subtle.digest("SHA-256", scriptContent),
+      ),
+    }),
+  );
+
   await stop();
 };
 
 const writeTextFileWithLog = async (
-  path: URL,
+  path: string,
   content: string,
 ): Promise<void> => {
-  console.log(path.toString() + " に書き込み中... " + content.length + "文字");
+  console.log(path + " に書き込み中... " + content.length + "文字");
   await ensureFile(path);
   await Deno.writeTextFile(path, content);
   console.log(path.toString() + " に書き込み完了!");
