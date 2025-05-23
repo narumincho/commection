@@ -1,5 +1,5 @@
-import { RequestPhase } from "../client.ts";
-import { ResponseError } from "../common.ts";
+import type { RequestPhase } from "../client.ts";
+import type { ResponseError } from "../common.ts";
 
 export type DataState<out Resource> = {
   readonly requestPhase: RequestPhase;
@@ -26,10 +26,10 @@ export type Operation<Resource> = {
   readonly func: (prev: Resource | undefined) => Resource | undefined;
 };
 
-export function updateDataState<Resource>(
+export const updateDataState = <Resource>(
   prev: DataState<Resource>,
   operation: Operation<Resource>,
-): DataState<Resource> {
+): DataState<Resource> => {
   switch (operation.type) {
     case "waitForRequest":
       return {
@@ -62,4 +62,4 @@ export function updateDataState<Resource>(
         lastError: prev.lastError,
       };
   }
-}
+};

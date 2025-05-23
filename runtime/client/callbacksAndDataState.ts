@@ -1,8 +1,8 @@
-import { ResponseError } from "../common.ts";
+import type { ResponseError } from "../common.ts";
 import {
-  DataState,
+  type DataState,
   dataStateNone,
-  Operation,
+  type Operation,
   updateDataState,
 } from "./dataState.ts";
 
@@ -70,50 +70,49 @@ export const createOneCallbacksAndDataState = <Resource>(
     [dataStateSymbol]: dataStateNone,
   };
 };
-
 /**
  * 変更したときに呼ばれるコールバックを追加する
  */
-export function addCallback<Resource>(
+export const addCallback = <Resource>(
   callbacksAndDataState: CallbacksAndDataState<Resource>,
   callback: () => void,
-): void {
+): void => {
   callbacksAndDataState[callbackSetSymbol].add(callback);
-}
+};
 
 /**
  * 変更したときに呼ばれるコールバックを削除する
  */
-export function deleteCallback<Resource>(
+export const deleteCallback = <Resource>(
   callbacksAndDataState: CallbacksAndDataState<Resource>,
   callback: () => void,
-): void {
+): void => {
   callbacksAndDataState[callbackSetSymbol].delete(callback);
-}
+};
 
-export function getDataState<Resource>(
+export const getDataState = <Resource>(
   callbacksAndDataState: CallbacksAndDataState<Resource>,
-): DataState<Resource> {
+): DataState<Resource> => {
   return callbacksAndDataState[dataStateSymbol];
-}
+};
 
-function setDataState<Resource>(
+const setDataState = <Resource>(
   callbacksAndDataState: CallbacksAndDataState<Resource>,
   dataState: DataState<Resource>,
-): void {
+): void => {
   callbacksAndDataState[dataStateSymbol] = dataState;
 
   for (const callback of callbacksAndDataState[callbackSetSymbol]) {
     callback();
   }
-}
+};
 
-export function updateDataStateInCallbacksAndDataState<Resource>(
+export const updateDataStateInCallbacksAndDataState = <Resource>(
   callbacksAndResource: CallbacksAndDataState<Resource>,
   operation: Operation<Resource>,
-): void {
+): void => {
   setDataState(
     callbacksAndResource,
     updateDataState<Resource>(getDataState(callbacksAndResource), operation),
   );
-}
+};
