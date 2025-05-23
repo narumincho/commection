@@ -1,6 +1,6 @@
 {
   "name": "@narumincho/commection",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "exports": {
     "./codegen/common": "./codegen/common.ts",
     "./codegen/server": "./codegen/server.ts",

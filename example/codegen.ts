@@ -14,7 +14,7 @@ const writeAndFormatCode = async (path: string, code: Module) => {
     generateCodeAsString({
       code,
       codeType: "TypeScript",
-      generatedByLinks: ["https://jsr.io/@narumincho/commection@0.0.1"],
+      generatedByLinks: ["https://jsr.io/@narumincho/commection@0.0.2"],
     }),
   );
 
