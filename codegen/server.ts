@@ -1,12 +1,13 @@
 import {
-  FunctionDefinition,
-  Identifier,
+  type ArrayItem,
+  type Identifier,
   identifierFromString,
-  Module,
-  Pattern,
-  Statement,
-  Type as TsType,
-  TypeAlias,
+  type Module,
+  type Pattern,
+  type Statement,
+  type Type as TsType,
+  type TypeAlias,
+  type VariableDefinition,
 } from "@narumincho/js-ts-code-generator";
 import * as type from "@narumincho/js-ts-code-generator/type";
 import * as expr from "@narumincho/js-ts-code-generator/expr";
@@ -22,6 +23,7 @@ type ServerNeedSpecifier = {
   readonly generatedType: string;
   readonly generatedFilterType: string;
   readonly generatedFilterSearchParamsCodec: string;
+  readonly naruminchoHttpServer: string;
 };
 
 export const generateServerCode = ({ specifier, schema }: {
@@ -34,7 +36,7 @@ export const generateServerCode = ({ specifier, schema }: {
         type: "typeAlias",
         typeAlias: implementTypeAlias({ specifier, schema }),
       },
-      { type: "function", function: handleFunction({ specifier, schema }) },
+      { type: "variable", variable: operationsVariable({ specifier, schema }) },
     ],
     statementList: [],
   };
@@ -243,160 +245,268 @@ const typeToTsType = (
   }
 };
 
-const handleFunction = ({ specifier, schema }: {
+const operationsVariable = ({ specifier, schema }: {
   readonly specifier: ServerNeedSpecifier;
   readonly schema: Schema;
-}): FunctionDefinition => {
+}): VariableDefinition => {
   return {
     export: true,
-    isAsync: true,
-    name: identifierFromString("handle"),
-    document: "",
-    typeParameterList: [{ name: identifierFromString("Context") }],
-    parameterList: [{
-      name: identifierFromString("parameter"),
-      document: "",
-      type: type.object([{
-        name: { type: "string", value: "implement" },
-        document: "",
-        required: true,
-        type: {
-          type: "ScopeInFile",
-          typeNameAndArguments: {
-            name: identifierFromString("Implement"),
-            arguments: [type.scopeInFile(identifierFromString("Context"))],
-          },
-        },
-      }, {
-        name: { type: "string", value: "request" },
-        document: "",
-        required: true,
-        type: type.Request,
-      }, {
-        name: { type: "string", value: "context" },
-        document: "",
-        required: true,
-        type: {
-          type: "ScopeInFile",
-          typeNameAndArguments: {
-            name: identifierFromString("Context"),
-            arguments: [],
-          },
-        },
-      }, {
-        name: { type: "string", value: "prefix" },
-        document: "",
-        required: true,
-        type: { type: "String" },
-      }]),
-    }],
-    returnType: type.Promise(type.Response),
-    statementList: [
-      {
-        type: "TryCatch",
-        tryCatch: {
-          tryStatementList: handleFunctionBody({ schema, specifier }),
-          catchParameter: identifierFromString("error"),
-          catchStatementList: [
+    name: identifierFromString("operations"),
+    type: undefined,
+    document: `HTTP サーバーの operations
+
+https://jsr.io/@narumincho/http-server を使って処理することができる`,
+
+    expr: expr.arrayLiteral(
+      schema.resources.flatMap((resource): ReadonlyArray<ArrayItem> => [
+        ...(resource.byIdSetApi
+          ? [
             {
-              type: "VariableDefinition",
-              variableDefinitionStatement: {
-                isConst: true,
-                name: identifierFromString("responseError"),
-                type: {
-                  type: "ImportedType",
-                  importedType: {
-                    moduleName: specifier.runtimeCommon,
-                    nameAndArguments: {
-                      name: identifierFromString("ResponseError"),
-                      arguments: [],
-                    },
-                  },
-                },
-                expr: expr.call({
+              expr: expr.call(
+                expr.get({
                   type: "ImportedVariable",
                   importedVariable: {
-                    moduleName: specifier.runtimeServer,
-                    name: identifierFromString("errorToResponseError"),
+                    moduleName: specifier.naruminchoHttpServer,
+                    name: identifierFromString("operation"),
                   },
-                }, [
-                  expr.call({
-                    type: "ImportedVariable",
-                    importedVariable: {
-                      moduleName: specifier.runtimeCommon,
-                      name: identifierFromString("unknownToError"),
-                    },
-                  }, [expr.variable(identifierFromString("error"))]),
-                ]),
-              },
-            },
-            {
-              type: "VariableDefinition",
-              variableDefinitionStatement: {
-                isConst: true,
-                name: identifierFromString("body"),
-                type: {
-                  type: "ImportedType",
-                  importedType: {
-                    moduleName: specifier.runtimeCommon,
-                    nameAndArguments: {
-                      name: identifierFromString("ErrorBody"),
-                      arguments: [],
-                    },
-                  },
-                },
-                expr: expr.objectLiteral([
-                  {
-                    type: "KeyValue",
-                    keyValue: {
-                      key: expr.stringLiteral("type"),
-                      value: expr.stringLiteral("error"),
-                    },
-                  },
-                  {
-                    type: "KeyValue",
-                    keyValue: {
-                      key: expr.stringLiteral("error"),
-                      value: expr.variable(
-                        identifierFromString("responseError"),
+                }, "get"),
+                [expr.objectLiteral([
+                  expr.memberKeyValue(
+                    "path",
+                    expr.stringLiteral(`/${firstLowerCase(resource.name)}`),
+                  ),
+                  expr.memberKeyValue(
+                    "queryParameters",
+                    expr.objectLiteral([
+                      expr.memberKeyValue(
+                        "id",
+                        expr.callMethod(
+                          {
+                            type: "ImportedVariable",
+                            importedVariable: {
+                              moduleName: specifier.naruminchoHttpServer,
+                              name: identifierFromString("query"),
+                            },
+                          },
+                          "array",
+                          [expr.objectLiteral([
+                            expr.memberKeyValue("deprecated", {
+                              type: "BooleanLiteral",
+                              bool: false,
+                            }),
+                            expr.memberKeyValue(
+                              "description",
+                              expr.stringLiteral(""),
+                            ),
+                            expr.memberKeyValue(
+                              "example",
+                              expr.arrayLiteral([]),
+                            ),
+                            expr.memberKeyValue(
+                              "queryItemType",
+                              expr.callMethod(
+                                {
+                                  type: "ImportedVariable",
+                                  importedVariable: {
+                                    moduleName: specifier.naruminchoHttpServer,
+                                    name: identifierFromString("query"),
+                                  },
+                                },
+                                "string",
+                                [],
+                              ),
+                            ),
+                          ])],
+                        ),
                       ),
-                    },
-                  },
-                ]),
-              },
-            },
-            statement.return(expr.call({
-              type: "ImportedVariable",
-              importedVariable: {
-                moduleName: specifier.runtimeServer,
-                name: identifierFromString("createJsonResponse"),
-              },
-            }, [expr.variable(identifierFromString("body")), {
-              type: "ConditionalOperator",
-              conditionalOperatorExpr: {
-                condition: expr.get(
-                  expr.variable(identifierFromString("responseError")),
-                  "code",
-                ),
-                thenExpr: expr.call({
+                    ]),
+                  ),
+                  expr.memberKeyValue(
+                    "responses",
+                    expr.arrayLiteral([{
+                      spread: false,
+                      expr: expr.call(
+                        expr.get({
+                          type: "ImportedVariable",
+                          importedVariable: {
+                            moduleName: specifier.naruminchoHttpServer,
+                            name: identifierFromString("response"),
+                          },
+                        }, "ok"),
+                        [expr.objectLiteral([
+                          expr.memberKeyValue("headers", expr.arrayLiteral([])),
+                          expr.memberKeyValue(
+                            "description",
+                            expr.stringLiteral(""),
+                          ),
+                          expr.memberKeyValue(
+                            "content",
+                            expr.arrayLiteral([{
+                              spread: false,
+                              expr: expr.call(
+                                expr.get({
+                                  type: "ImportedVariable",
+                                  importedVariable: {
+                                    moduleName: specifier.naruminchoHttpServer,
+                                    name: identifierFromString("body"),
+                                  },
+                                }, "applicationJson"),
+                                [expr.call(
+                                  expr.get({
+                                    type: "ImportedVariable",
+                                    importedVariable: {
+                                      moduleName:
+                                        specifier.naruminchoHttpServer,
+                                      name: identifierFromString("json"),
+                                    },
+                                  }, "object"),
+                                  [expr.objectLiteral([])],
+                                )],
+                              ),
+                            }]),
+                          ),
+                        ])],
+                      ),
+                    }]),
+                  ),
+                  expr.memberKeyValue(
+                    "handler",
+                    expr.lambda({
+                      parameterList: [{
+                        name: identifierFromString("parameter"),
+                        type: undefined,
+                      }],
+                      returnType: undefined,
+                      statementList: [
+                        statement.return(
+                          expr.call(
+                            expr.get(
+                              expr.get(
+                                expr.variable(
+                                  identifierFromString("parameter"),
+                                ),
+                                "response",
+                              ),
+                              "200",
+                            ),
+                            [
+                              expr.objectLiteral([]),
+                              expr.stringLiteral("application/json"),
+                              expr.objectLiteral([]),
+                            ],
+                          ),
+                        ),
+                      ],
+                    }),
+                  ),
+                ])],
+              ),
+              spread: false,
+            } satisfies ArrayItem,
+          ]
+          : []),
+        ...(resource.filterApi
+          ? [
+            {
+              expr: expr.call(
+                expr.get({
                   type: "ImportedVariable",
                   importedVariable: {
-                    moduleName: specifier.runtimeServer,
-                    name: identifierFromString(
-                      "responseErrorTypeToHttpStatusCode",
-                    ),
+                    moduleName: specifier.naruminchoHttpServer,
+                    name: identifierFromString("operation"),
                   },
-                }, [expr.get(
-                  expr.variable(identifierFromString("responseError")),
-                  "code",
-                )]),
-                elseExpr: expr.stringLiteral("InternalServerError"),
-              },
-            }])),
-          ],
-        },
-      },
-    ],
+                }, "get"),
+                [expr.objectLiteral([
+                  expr.memberKeyValue(
+                    "path",
+                    expr.stringLiteral(`/${firstLowerCase(resource.name)}List`),
+                  ),
+                  expr.memberKeyValue(
+                    "responses",
+                    expr.arrayLiteral([{
+                      spread: false,
+                      expr: expr.call(
+                        expr.get({
+                          type: "ImportedVariable",
+                          importedVariable: {
+                            moduleName: specifier.naruminchoHttpServer,
+                            name: identifierFromString("response"),
+                          },
+                        }, "ok"),
+                        [expr.objectLiteral([
+                          expr.memberKeyValue("headers", expr.arrayLiteral([])),
+                          expr.memberKeyValue(
+                            "description",
+                            expr.stringLiteral(""),
+                          ),
+                          expr.memberKeyValue(
+                            "content",
+                            expr.arrayLiteral([{
+                              spread: false,
+                              expr: expr.call(
+                                expr.get({
+                                  type: "ImportedVariable",
+                                  importedVariable: {
+                                    moduleName: specifier.naruminchoHttpServer,
+                                    name: identifierFromString("body"),
+                                  },
+                                }, "applicationJson"),
+                                [expr.call(
+                                  expr.get({
+                                    type: "ImportedVariable",
+                                    importedVariable: {
+                                      moduleName:
+                                        specifier.naruminchoHttpServer,
+                                      name: identifierFromString("json"),
+                                    },
+                                  }, "object"),
+                                  [expr.objectLiteral([])],
+                                )],
+                              ),
+                            }]),
+                          ),
+                        ])],
+                      ),
+                    }]),
+                  ),
+                  expr.memberKeyValue(
+                    "handler",
+                    expr.lambda({
+                      parameterList: [{
+                        name: identifierFromString("parameter"),
+                        type: undefined,
+                      }],
+                      returnType: undefined,
+                      statementList: [
+                        statement.return(
+                          expr.call(
+                            expr.get(
+                              expr.get(
+                                expr.variable(
+                                  identifierFromString("parameter"),
+                                ),
+                                "response",
+                              ),
+                              "200",
+                            ),
+                            [
+                              expr.objectLiteral([]),
+                              expr.stringLiteral("application/json"),
+                              expr.objectLiteral([]),
+                            ],
+                          ),
+                        ),
+                      ],
+                    }),
+                  ),
+                ])],
+              ),
+              spread: false,
+            } satisfies ArrayItem,
+          ]
+          : []),
+      ]),
+    ),
   };
 };
 

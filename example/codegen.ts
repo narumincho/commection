@@ -220,12 +220,13 @@ const { id, type, filterType, filterSearchParamsCodec } = generateCommonCode({
 });
 const server = generateServerCode({
   specifier: {
-    generatedId: "../common/id.ts",
-    generatedType: "../common/type.ts",
-    generatedFilterType: "../common/filterType.ts",
-    generatedFilterSearchParamsCodec: "../common/filterSearchParamsCodec.ts",
-    runtimeCommon: "../../../runtime/common.ts",
-    runtimeServer: "../../../runtime/server.ts",
+    generatedId: "./common/id.ts",
+    generatedType: "./common/type.ts",
+    generatedFilterType: "./common/filterType.ts",
+    generatedFilterSearchParamsCodec: "./common/filterSearchParamsCodec.ts",
+    runtimeCommon: "../../runtime/common.ts",
+    runtimeServer: "../../runtime/server.ts",
+    naruminchoHttpServer: "@narumincho/http-server",
   },
   schema,
 });
@@ -267,7 +268,7 @@ await Promise.all([
     filterSearchParamsCodec,
   ),
   writeAndFormatCode(
-    "./example/generated/server/commection.ts",
+    "./example/generated/server.ts",
     server,
   ),
   ...[...clients].map(([name, module]) =>
