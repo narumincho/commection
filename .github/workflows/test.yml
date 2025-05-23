@@ -1,9 +1,7 @@
 name: test
 
 on:
-  pull_request:
-    branches-ignore:
-      - main
+  pull_request
 
 jobs:
   deno-test:
