@@ -9,8 +9,8 @@
 import * as a from "../common/id.ts";
 import * as b from "../common/type.ts";
 import * as c from "../common/filterType.ts";
-import * as d from "../commection/runtime/common.ts";
-import * as e from "../commection/runtime/server.ts";
+import * as d from "../../../runtime/common.ts";
+import * as e from "../../../runtime/server.ts";
 import * as f from "../common/filterSearchParamsCodec.ts";
 export type Implement<Context extends unknown> = {
   readonly getCollectionByIdSet: (

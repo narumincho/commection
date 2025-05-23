@@ -8,14 +8,14 @@
 
 import * as a from "react";
 import * as b from "./subscribe.ts";
-import * as c from "../../commection/runtime/client/callbacksAndDataStateMap.ts";
-import * as d from "../../commection/runtime/client/react.ts";
-import * as e from "../../commection/runtime/client/dataState.ts";
-import * as f from "../../common/id.ts";
-import * as g from "../../common/type.ts";
-import * as h from "../../common/filterType.ts";
-import * as i from "../../common/filterSearchParamsCodec.ts";
-import * as j from "../../commection/runtime/client/store.ts";
+import * as c from "../../../runtime/client/callbacksAndDataStateMap.ts";
+import * as d from "../../../runtime/client/react.ts";
+import * as e from "../../../runtime/client/dataState.ts";
+import * as f from "../common/id.ts";
+import * as g from "../common/type.ts";
+import * as h from "../common/filterType.ts";
+import * as i from "../common/filterSearchParamsCodec.ts";
+import * as j from "../../../runtime/client/store.ts";
 
 /**
  * commection のデータの保管庫を作る.

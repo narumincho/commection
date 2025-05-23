@@ -6,11 +6,11 @@
  * @module
  */
 
-import * as a from "../../common/id.ts";
-import * as b from "../../commection/runtime/client/request.ts";
-import * as c from "../../common/type.ts";
-import * as d from "../../common/filterType.ts";
-import * as e from "../../common/filterSearchParamsCodec.ts";
+import * as a from "../common/id.ts";
+import * as b from "../../../runtime/client/request.ts";
+import * as c from "../common/type.ts";
+import * as d from "../common/filterType.ts";
+import * as e from "../common/filterSearchParamsCodec.ts";
 const prefix: string = "/commection";
 
 export const getCollectionByIdSet = async (

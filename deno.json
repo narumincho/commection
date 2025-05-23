@@ -14,6 +14,7 @@
   },
   "imports": {
     "@narumincho/http-server": "jsr:@narumincho/http-server@^0.0.2",
-    "@narumincho/js-ts-code-generator": "jsr:@narumincho/js-ts-code-generator@^0.8.2"
+    "@narumincho/js-ts-code-generator": "jsr:@narumincho/js-ts-code-generator@^0.8.2",
+    "react": "npm:react@^19.1.0"
   }
 }

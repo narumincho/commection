@@ -15,7 +15,8 @@
     "npm:@types/react@*": "19.0.2",
     "npm:esbuild@*": "0.24.2",
     "npm:react-dom@*": "19.0.0_react@19.0.0",
-    "npm:react@*": "19.0.0"
+    "npm:react@*": "19.0.0",
+    "npm:react@^19.1.0": "19.1.0"
   },
   "jsr": {
     "@luca/esbuild-deno-loader@0.11.1": {
@@ -224,12 +225,15 @@
     "react-dom@19.0.0_react@19.0.0": {
       "integrity": "sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==",
       "dependencies": [
-        "react",
+        "react@19.0.0",
         "scheduler"
       ]
     },
     "react@19.0.0": {
       "integrity": "sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ=="
+    },
+    "react@19.1.0": {
+      "integrity": "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="
     },
     "scheduler@0.25.0": {
       "integrity": "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="
@@ -238,7 +242,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@narumincho/http-server@^0.0.2",
-      "jsr:@narumincho/js-ts-code-generator@~0.8.2"
+      "jsr:@narumincho/js-ts-code-generator@~0.8.2",
+      "npm:react@^19.1.0"
     ]
   }
 }

@@ -211,7 +211,7 @@ const schema = schemaInputToSchema(schemaInput);
 const { id, type, filterType, filterSearchParamsCodec } = generateCommonCode({
   schema,
   specifier: {
-    runtimeCommon: "../commection/runtime/common.ts",
+    runtimeCommon: "../../../runtime/common.ts",
     idModulePath: "./id.ts",
   },
 });
@@ -221,8 +221,8 @@ const server = generateServerCode({
     generatedType: "../common/type.ts",
     generatedFilterType: "../common/filterType.ts",
     generatedFilterSearchParamsCodec: "../common/filterSearchParamsCodec.ts",
-    runtimeCommon: "../commection/runtime/common.ts",
-    runtimeServer: "../commection/runtime/server.ts",
+    runtimeCommon: "../../../runtime/common.ts",
+    runtimeServer: "../../../runtime/server.ts",
   },
   schema,
 });
@@ -231,18 +231,18 @@ const clients = generateClientCode({
   serverUrlPrefix: "/commection",
   schema,
   specifier: {
-    generatedId: "../../common/id.ts",
-    generatedType: "../../common/type.ts",
-    generatedFilterType: "../../common/filterType.ts",
-    generatedFilterSearchParamsCodec: "../../common/filterSearchParamsCodec.ts",
-    runtimeRequest: "../../commection/runtime/client/request.ts",
-    runtimeStore: "../../commection/runtime/client/store.ts",
+    generatedId: "../common/id.ts",
+    generatedType: "../common/type.ts",
+    generatedFilterType: "../common/filterType.ts",
+    generatedFilterSearchParamsCodec: "../common/filterSearchParamsCodec.ts",
+    runtimeRequest: "../../../runtime/client/request.ts",
+    runtimeStore: "../../../runtime/client/store.ts",
     runtimeCallbacksAndDataStateMap:
-      "../../commection/runtime/client/callbacksAndDataStateMap.ts",
+      "../../../runtime/client/callbacksAndDataStateMap.ts",
     runtimeCallbacksAndDataState:
-      "../../commection/runtime/client/callbacksAndDataState.ts",
-    runtimeDataState: "../../commection/runtime/client/dataState.ts",
-    runtimeReact: "../../commection/runtime/client/react.ts",
+      "../../../runtime/client/callbacksAndDataState.ts",
+    runtimeDataState: "../../../runtime/client/dataState.ts",
+    runtimeReact: "../../../runtime/client/react.ts",
   },
 });
 

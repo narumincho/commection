@@ -7,7 +7,7 @@
  */
 
 import * as a from "./filterType.ts";
-import * as b from "../commection/runtime/common.ts";
+import * as b from "../../../runtime/common.ts";
 import * as c from "./id.ts";
 export const collectionFilterFromSearchParams = (
   searchParams: URLSearchParams,
