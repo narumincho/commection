@@ -7,6 +7,9 @@
     "./codegen/client": "./codegen/client.ts",
     "./codegen/schema": "./codegen/schema.ts"
   },
+  "publish": {
+    "exclude": [".github", ".vscode", "example", "deno"]
+  },
   "compilerOptions": {
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
