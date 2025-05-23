@@ -1,6 +1,6 @@
 import {
   addCallback,
-  CallbacksAndDataState,
+  type CallbacksAndDataState,
   createAndDataStateDoneError,
   createAndDataStateDoneResource,
   createOneCallbacksAndDataState,
@@ -8,7 +8,7 @@ import {
   getDataState,
   updateDataStateInCallbacksAndDataState,
 } from "./callbacksAndDataState.ts";
-import { dataStateNone } from "./dataState.ts";
+import { type DataState, dataStateNone } from "./dataState.ts";
 
 export type CallbacksAndDataStateMap<Id, Resource> = Map<
   Id,
@@ -43,10 +43,10 @@ export const deleteCallbackInMap = <Id, Resource>(
 /**
  * "waitForRequest" (取得待ち)状態にして, 再取得されるようにする
  */
-export function setWaitForRequest<Id, Resource>(
+export const setWaitForRequest = <Id, Resource>(
   map: CallbacksAndDataStateMap<Id, Resource>,
   id: Id,
-): void {
+): void => {
   const callbacksAndResource = map.get(id);
   if (!callbacksAndResource) {
     return;
@@ -54,7 +54,7 @@ export function setWaitForRequest<Id, Resource>(
   updateDataStateInCallbacksAndDataState(callbacksAndResource, {
     type: "waitForRequest",
   });
-}
+};
 
 export const setData = <Id, Resource>(
   map: CallbacksAndDataStateMap<Id, Resource>,
@@ -88,10 +88,10 @@ export const setError = <Id, Resource>(
   });
 };
 
-export function getDataStateInMap<Id, Resource>(
+export const getDataStateInMap = <Id, Resource>(
   map: CallbacksAndDataStateMap<Id, Resource>,
   id: Id,
-) {
+): DataState<Resource> => {
   const c = map.get(id);
   return c ? getDataState(c) : dataStateNone;
-}
+};

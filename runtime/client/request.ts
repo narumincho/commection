@@ -1,8 +1,8 @@
 import {
-  ByFilterResponseBody,
-  ByIdSetResponseBody,
-  OneResponseBody,
-  ResponseError,
+  type ByFilterResponseBody,
+  type ByIdSetResponseBody,
+  type OneResponseBody,
+  type ResponseError,
   unknownToError,
 } from "../common.ts";
 
@@ -30,16 +30,14 @@ export type FilterResponse<Id, Resource> = {
   // ページング情報がここに追加される予定
 };
 
-export async function getResourceListByFilter<Id extends string, Resource>(
+export const getResourceListByFilter = async <Id extends string, Resource>(
   { prefix, resourceName, searchParams, bearerToken }: {
     prefix: string;
     resourceName: string;
     searchParams: URLSearchParams;
     bearerToken: string | undefined;
   },
-): Promise<
-  FilterResponse<Id, Resource>
-> {
+): Promise<FilterResponse<Id, Resource>> => {
   const response: ByFilterResponseBody = await (await fetch(
     `${prefix}/${resourceName}List${
       searchParams.size === 0 ? "" : `?${searchParams}`
@@ -52,7 +50,7 @@ export async function getResourceListByFilter<Id extends string, Resource>(
     throw new Error(response.error.message);
   }
   return response as FilterResponse<Id, Resource>;
-}
+};
 
 export const createHeaders = (
   bearerToken: string | undefined,

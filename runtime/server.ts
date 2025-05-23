@@ -1,9 +1,9 @@
-import {
-  type ByIdSetResponseBody,
-  type JsonValue,
-  type OneResponseBody,
-  type ResponseError,
-  type ResponseErrorType,
+import type {
+  ByIdSetResponseBody,
+  JsonValue,
+  OneResponseBody,
+  ResponseError,
+  ResponseErrorType,
 } from "./common.ts";
 
 export const startWithAndPickToEnd = (

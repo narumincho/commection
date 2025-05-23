@@ -1,14 +1,14 @@
 import {
-  Definition,
+  type Definition,
   definitionFunction,
   definitionVariable,
-  Expr,
+  type Expr,
   identifierFromString,
-  Module,
-  Statement,
-  VariableDefinition,
+  type Module,
+  type Statement,
+  type VariableDefinition,
 } from "@narumincho/js-ts-code-generator";
-import { Resource, Schema } from "../schema.ts";
+import type { Resource, Schema } from "../schema.ts";
 import * as expr from "@narumincho/js-ts-code-generator/expr";
 import * as type from "@narumincho/js-ts-code-generator/type";
 import * as statement from "@narumincho/js-ts-code-generator/statement";
