@@ -1,12 +1,12 @@
 import {
-  CallbacksAndDataState,
+  type CallbacksAndDataState,
   createAndDataStateDoneResource,
   getDataState,
   updateDataStateInCallbacksAndDataState,
 } from "./callbacksAndDataState.ts";
-import { CallbacksAndDataStateMap } from "./callbacksAndDataStateMap.ts";
-import { DataState } from "./dataState.ts";
-import { DataOrError, FilterResponse } from "./request.ts";
+import type { CallbacksAndDataStateMap } from "./callbacksAndDataStateMap.ts";
+import type { DataState } from "./dataState.ts";
+import type { DataOrError, FilterResponse } from "./request.ts";
 
 /**
  * よくある
