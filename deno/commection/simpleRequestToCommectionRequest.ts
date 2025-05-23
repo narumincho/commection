@@ -2,7 +2,8 @@ import { stringArrayEqual, stringArrayMatchPrefix } from "../listUtil.ts";
 import { SimpleRequest } from "../simpleHttpType/request.ts";
 import { Schema } from "./main.ts";
 import { FunctionOrType, RequestParseResult } from "./server.tsx";
-import dist from "../dist.json" with { type: "json" };
+import iconGenerated from "../icon.generated.json" with { type: "json" };
+import scriptGenerated from "../script.generated.json" with { type: "json" };
 
 export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
   readonly simpleRequest: SimpleRequest;
@@ -45,12 +46,16 @@ export const simpleRequestToCommectionRequest = <RequestExpr>(parameter: {
   ]);
   if (editorAssetsSuffix !== undefined) {
     // /{prefix}/editor-assets/icon-hash.png
-    if (stringArrayEqual(editorAssetsSuffix, [`icon-${dist.iconHash}.png`])) {
+    if (
+      stringArrayEqual(editorAssetsSuffix, [`icon-${iconGenerated.hash}.png`])
+    ) {
       return { type: "editorIcon" };
     }
     // /{prefix}/editor-assets/script-hash.js
     if (
-      stringArrayEqual(editorAssetsSuffix, [`script-${dist.scriptHash}.js`])
+      stringArrayEqual(editorAssetsSuffix, [
+        `script-${scriptGenerated.hash}.js`,
+      ])
     ) {
       return { type: "editorScript" };
     }

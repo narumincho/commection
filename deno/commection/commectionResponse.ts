@@ -1,7 +1,7 @@
 export type CommectionResponse =
   | {
     readonly type: "editorHtml";
-    readonly html: string;
+    readonly html: Promise<ReadableStream<Uint8Array>>;
   }
   | {
     readonly type: "editorIcon";

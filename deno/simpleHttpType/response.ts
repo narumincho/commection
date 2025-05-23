@@ -10,7 +10,7 @@ export type SimpleResponse =
 export type SimpleResponseBody =
   | {
     readonly type: "html";
-    readonly html: string;
+    readonly html: Promise<ReadableStream<Uint8Array<ArrayBufferLike>>>;
   }
   | {
     readonly type: "png";
