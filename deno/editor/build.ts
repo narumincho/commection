@@ -3,21 +3,15 @@ import { build as esBuild, stop } from "npm:esbuild";
 import { ensureFile } from "jsr:@std/fs";
 import { encodeBase64, encodeHex } from "jsr:@std/encoding";
 
-type BuildClientResult = {
-  readonly scriptHash: string;
-  readonly scriptContent: string;
-  readonly iconHash: string;
-  readonly iconBase64Content: string;
-};
-
 const buildClientScript = async (): Promise<Uint8Array> => {
   const esbuildResult = await esBuild({
     entryPoints: ["./deno/editor/main.tsx"],
     plugins: denoPlugins(),
     write: false,
     bundle: true,
+    minify: true,
     format: "esm",
-    target: ["chrome114"],
+    target: ["chrome136"],
   });
 
   for (const esbuildResultFile of esbuildResult.outputFiles) {
