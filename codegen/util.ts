@@ -1,27 +1,27 @@
 import {
   identifierFromString,
-  Type as TsType,
+  type Type as TsType,
 } from "@narumincho/js-ts-code-generator";
 import { object } from "@narumincho/js-ts-code-generator/type";
-import { Type } from "./schema.ts";
+import type { Type } from "./schema.ts";
 
-export function firstLowerCase(s: string): string {
+export const firstLowerCase = (s: string): string => {
   const first = s.at(0);
   if (first) {
     return first.toLowerCase() + s.slice(1);
   }
   return "";
-}
+};
 
-export function firstUpperCase(s: string): string {
+export const firstUpperCase = (s: string): string => {
   const first = s.at(0);
   if (first) {
     return first.toUpperCase() + s.slice(1);
   }
   return "";
-}
+};
 
-export function typeToTsType(type: Type, idSpecifier: string): TsType {
+export const typeToTsType = (type: Type, idSpecifier: string): TsType => {
   switch (type.type) {
     case "string":
       return { type: "String" };
@@ -51,4 +51,4 @@ export function typeToTsType(type: Type, idSpecifier: string): TsType {
         })),
       );
   }
-}
+};

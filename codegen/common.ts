@@ -1,14 +1,14 @@
 import {
-  ArrayItem,
-  Definition,
+  type ArrayItem,
+  type Definition,
   definitionTypeAlias,
-  FunctionDefinition,
-  Identifier,
+  type FunctionDefinition,
+  type Identifier,
   identifierFromString,
-  Member,
-  Module,
-  Statement,
-  TypeAlias,
+  type Member,
+  type Module,
+  type Statement,
+  type TypeAlias,
 } from "@narumincho/js-ts-code-generator";
 import * as type from "@narumincho/js-ts-code-generator/type";
 import * as expr from "@narumincho/js-ts-code-generator/expr";
@@ -99,11 +99,11 @@ export const generateCommonCode = (
   };
 };
 
-function createTypeDefinition(
+const createTypeDefinition = (
   name: string,
   fields: ReadonlyArray<FieldInput>,
   idModulePath: string,
-): Definition {
+): Definition => {
   return {
     type: "typeAlias",
     typeAlias: {
@@ -132,9 +132,9 @@ function createTypeDefinition(
       ),
     },
   };
-}
+};
 
-export const createFilterTypeName = (name: string) =>
+export const createFilterTypeName = (name: string): Identifier =>
   identifierFromString(`${name}Filter`);
 
 const filterTypeAlias = (

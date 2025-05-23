@@ -1,10 +1,10 @@
 import {
   definitionFunction,
-  FunctionDefinition,
-  Identifier,
+  type FunctionDefinition,
+  type Identifier,
   identifierFromString,
-  Module,
-  Type as TsType,
+  type Module,
+  type Type as TsType,
 } from "@narumincho/js-ts-code-generator";
 import type { Schema } from "../schema.ts";
 import * as type from "@narumincho/js-ts-code-generator/type";
@@ -20,13 +20,13 @@ export type RequestNeedSpecifier = {
   readonly generatedFilterSearchParamsCodec: string;
 };
 
-export function generateRequestCode(
+export const generateRequestCode = (
   { specifier, schema, serverUrlPrefix }: {
     readonly specifier: RequestNeedSpecifier;
     readonly schema: Schema;
     readonly serverUrlPrefix: string;
   },
-): Module {
+): Module => {
   return {
     definitionList: [
       {
@@ -74,7 +74,7 @@ export function generateRequestCode(
     ],
     statementList: [],
   };
-}
+};
 
 export const getByIdSetFunctionName = (name: string): Identifier =>
   identifierFromString(`get${name}ByIdSet`);

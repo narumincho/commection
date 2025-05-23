@@ -20,20 +20,20 @@ export type CallbacksAndDataState<Resource> = {
 /**
  * 取得要求ありのデータ状態を作成する
  */
-export function createAndDataState<Resource>(): CallbacksAndDataState<
+export const createAndDataState = <Resource>(): CallbacksAndDataState<
   Resource
-> {
+> => {
   return {
     [callbackSetSymbol]: new Set([]),
     [dataStateSymbol]: dataStateNone,
   };
-}
+};
 
-export function createAndDataStateDoneResource<Resource>(
+export const createAndDataStateDoneResource = <Resource>(
   resource: Resource,
 ): CallbacksAndDataState<
   Resource
-> {
+> => {
   return {
     [callbackSetSymbol]: new Set([]),
     [dataStateSymbol]: {
@@ -42,13 +42,13 @@ export function createAndDataStateDoneResource<Resource>(
       requestPhase: "done",
     },
   };
-}
+};
 
-export function createAndDataStateDoneError<Resource>(
+export const createAndDataStateDoneError = <Resource>(
   error: ResponseError,
 ): CallbacksAndDataState<
   Resource
-> {
+> => {
   return {
     [callbackSetSymbol]: new Set([]),
     [dataStateSymbol]: {
@@ -57,19 +57,19 @@ export function createAndDataStateDoneError<Resource>(
       requestPhase: "done",
     },
   };
-}
+};
 
 /**
  * 取得要求ありのデータ状態を作成する
  */
-export function createOneCallbacksAndDataState<Resource>(
+export const createOneCallbacksAndDataState = <Resource>(
   callback: () => void,
-): CallbacksAndDataState<Resource> {
+): CallbacksAndDataState<Resource> => {
   return {
     [callbackSetSymbol]: new Set([callback]),
     [dataStateSymbol]: dataStateNone,
   };
-}
+};
 
 /**
  * 変更したときに呼ばれるコールバックを追加する
