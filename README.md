@@ -1,44 +1,54 @@
-# commection
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/narumincho/commection)
-
-## Deno Example
-
-```sh
-deno run --allow-net=:8000 ./deno/example/main.ts
-```
-
-## Editor build command
-
-```sh
-deno run -A ./deno/editor/build.ts
-```
-
-## Handle request
-
 ```mermaid
 graph TB
-Request(Request)
-SimpleRequest(SimpleRequest)
-CommectionRequest(CommectionRequest)
-CommectionResponse(CommectionResponse)
-SimpleResponse(SimpleResponse)
-Response(Response)
-
-Request -->|requestToSimpleRequest| SimpleRequest -->|simpleRequestToCommectionRequest| CommectionRequest -->|handleRequest| CommectionResponse -->|commectionResponseToSimpleResponse| SimpleResponse --> |simepleResponseToResponse|Response
+  id("id")
+  type("type")
+  request("request")
+  context("context")
+  requestAndCheck("requestAndCheck")
+  react("react")
+  filter("filter")
+  filterSearchParamsCodec("filterSearchParamsCodec")
+  id --> type
+  id --> request
+  type --> request
+  type --> context
+  id --> context
+  type --> filter --> filterSearchParamsCodec
+  filterSearchParamsCodec --> request
+  request --> requestAndCheck
+  context --> requestAndCheck
+  requestAndCheck --> react
+  filter --> request
 ```
 
-## Upgrade Dependencies
+# common
 
-rust
+クライアントとサーバー共通で使えるコード
 
-```sh
-cd ./rust
-cargo upgrade
-```
+## id
 
-dart
+リソースのIDの型
 
-```sh
-dart pub upgrade --major-versions --directory=./dart/commection
-```
+## type
+
+リソースの型定義
+
+## filter
+
+リソース一覧を呼び出すためのフィルターパラメータの型
+
+## filterSearchParamsCodec
+
+フィルターパラメータの型とURLクエリとの変換関数
+
+# server
+
+サーバーのコード
+
+# client
+
+クライアントのコード
+
+## request
+
+APIを呼び出すための関数

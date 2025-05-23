@@ -1,19 +1,29 @@
 {
+  "name": "@narumincho/commection",
+  "version": "0.0.1",
+  "exports": {
+    "./codegen/common": "./codegen/common.ts",
+    "./codegen/server": "./codegen/server.ts",
+    "./codegen/client": "./codegen/client.ts",
+    "./codegen/schema": "./codegen/schema.ts"
+  },
   "compilerOptions": {
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "erasableSyntaxOnly": true,
     "jsx": "react",
     "jsxFactory": "React.createElement",
     "jsxFragmentFactory": "React.Fragment",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "deno.ns",
-      "deno.unstable"
-    ]
+    "lib": ["dom", "dom.iterable", "deno.ns", "deno.unstable"]
   },
   "tasks": {
+    "example-codegen": "deno run --check -A ./example/codegen.ts",
     "example-start": "deno run --check --watch --allow-net=:8000 --allow-env=NODE_ENV ./deno/example/main.ts",
     "editor-build": "deno run --check -A ./deno/editor/build.ts"
+  },
+  "imports": {
+    "@narumincho/http-server": "jsr:@narumincho/http-server@^0.0.2",
+    "@narumincho/js-ts-code-generator": "jsr:@narumincho/js-ts-code-generator@^0.8.2",
+    "react": "npm:react@^19.1.0"
   }
 }
