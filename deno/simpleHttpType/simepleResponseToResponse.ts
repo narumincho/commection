@@ -1,11 +1,11 @@
 import { SimpleResponse, SimpleResponseBody } from "./response.ts";
 
-export const simpleResponseToResponse = (
+export const simpleResponseToResponse = async (
   simpleResponse: SimpleResponse,
-): Response => {
+): Promise<Response> => {
   switch (simpleResponse.status) {
     case "ok":
-      return new Response(simpleResponseBodyToBody(simpleResponse.body), {
+      return new Response(await simpleResponseBodyToBody(simpleResponse.body), {
         headers: {
           "content-type": simpleResponseBodyToContentType(simpleResponse.body),
         },
@@ -15,12 +15,12 @@ export const simpleResponseToResponse = (
   }
 };
 
-const simpleResponseBodyToBody = (
+const simpleResponseBodyToBody = async (
   simpleResponseBody: SimpleResponseBody,
-): Uint8Array => {
+): Promise<BodyInit> => {
   switch (simpleResponseBody.type) {
     case "html":
-      return new TextEncoder().encode(simpleResponseBody.html);
+      return await simpleResponseBody.html;
     case "png":
       return simpleResponseBody.png;
     case "js":

@@ -5,11 +5,11 @@ import { commectionResponseToSimpleResponse } from "./commectionResponseToSimple
 import { handleRequest } from "./server.tsx";
 import { simpleRequestToCommectionRequest } from "./simpleRequestToCommectionRequest.ts";
 
-export const heandleCommectionRequest = <RequestExpr>(parameter: {
+export const heandleCommectionRequest = async <RequestExpr>(parameter: {
   readonly request: Request;
   readonly schema: Schema<RequestExpr>;
   readonly pathPrefix: ReadonlyArray<string>;
-}): Response | undefined => {
+}): Promise<Response | undefined> => {
   const simpleRequest = requestToSimpleRequest(parameter.request);
   if (simpleRequest === undefined) {
     return new Response("Unsupported request", { status: 400 });
@@ -35,7 +35,7 @@ export const heandleCommectionRequest = <RequestExpr>(parameter: {
     return undefined;
   }
   const simpleResponse = commectionResponseToSimpleResponse(commectionResponse);
-  const response = simpleResponseToResponse(simpleResponse);
+  const response = await simpleResponseToResponse(simpleResponse);
   return response;
 };
 
@@ -62,13 +62,13 @@ export type TypeAttribute = "";
 
 export type TypeStructure =
   | {
-      readonly type: "sum";
-      readonly pattern: ReadonlyArray<Pattern>;
-    }
+    readonly type: "sum";
+    readonly pattern: ReadonlyArray<Pattern>;
+  }
   | {
-      readonly type: "product";
-      readonly fields: ReadonlyArray<Field>;
-    };
+    readonly type: "product";
+    readonly fields: ReadonlyArray<Field>;
+  };
 
 export type Pattern = {
   readonly type: Type;

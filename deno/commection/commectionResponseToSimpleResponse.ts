@@ -1,9 +1,10 @@
 import { SimpleResponse } from "../simpleHttpType/response.ts";
-import dist from "../dist.json" with { type: "json" };
+import scriptGenerated from "../script.generated.json" with { type: "json" };
+import iconGenerated from "../icon.generated.json" with { type: "json" };
 import { decodeBase64 } from "jsr:@std/encoding";
 import { CommectionResponse } from "./commectionResponse.ts";
 
-const iconContent = decodeBase64(dist.iconBase64Content);
+const iconContent = decodeBase64(iconGenerated.content);
 
 export const commectionResponseToSimpleResponse = (
   commectionResponse: CommectionResponse,
@@ -30,7 +31,7 @@ export const commectionResponseToSimpleResponse = (
         status: "ok",
         body: {
           type: "js",
-          js: dist.scriptContent,
+          js: scriptGenerated.content,
         },
       };
   }

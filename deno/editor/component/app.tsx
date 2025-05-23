@@ -1,6 +1,6 @@
 // @ts-types="npm:@types/react"
 import React from "npm:react";
-import icon from "../icon.generated.json" with { type: "json" };
+import icon from "../../icon.generated.json" with { type: "json" };
 
 export const App = (
   { origin, pathPrefix }: {

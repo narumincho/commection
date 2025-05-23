@@ -3,8 +3,8 @@ import { createPhantomData } from "../phantom.ts";
 
 Deno.serve(
   { port: 8000 },
-  (request) => {
-    const response = heandleCommectionRequest({
+  async (request) => {
+    const response = await heandleCommectionRequest({
       request,
       pathPrefix: [],
       schema: {

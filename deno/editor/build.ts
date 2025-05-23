@@ -33,7 +33,7 @@ const main = async (): Promise<void> => {
     new URL("./icon.png", import.meta.url),
   );
   await writeTextFileWithLog(
-    "./deno/editor/icon.generated.json",
+    "./deno/icon.generated.json",
     JSON.stringify({
       content: encodeBase64(iconContent),
       hash: encodeHex(
