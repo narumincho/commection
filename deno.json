@@ -1,11 +1,21 @@
 {
   "name": "@narumincho/commection",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "exports": {
     "./codegen/common": "./codegen/common.ts",
     "./codegen/server": "./codegen/server.ts",
     "./codegen/client": "./codegen/client.ts",
-    "./codegen/schema": "./codegen/schema.ts"
+    "./codegen/schema": "./codegen/schema.ts",
+    "./runtime/client/callbacksAndDataState": "./runtime/client/callbacksAndDataState.ts",
+    "./runtime/client/callbacksAndDataStateMap": "./runtime/client/callbacksAndDataStateMap.ts",
+    "./runtime/client/dataState": "./runtime/client/dataState.ts",
+    "./runtime/client/react": "./runtime/client/react.ts",
+    "./runtime/client/request": "./runtime/client/request.ts",
+    "./runtime/client/store": "./runtime/client/store.ts",
+    "./runtime/client/subscribe": "./runtime/client/subscribe.ts",
+    "./runtime/client": "./runtime/client.ts",
+    "./runtime/common": "./runtime/common.ts",
+    "./runtime/server": "./runtime/server.ts"
   },
   "publish": {
     "exclude": [".github", ".vscode", "example", "deno"]
