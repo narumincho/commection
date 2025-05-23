@@ -3,10 +3,12 @@
   "specifiers": {
     "jsr:@luca/esbuild-deno-loader@*": "0.11.1",
     "jsr:@narumincho/js-ts-code-generator@~0.8.2": "0.8.2",
+    "jsr:@std/assert@*": "1.0.13",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
     "jsr:@std/encoding@*": "1.0.10",
     "jsr:@std/encoding@^1.0.5": "1.0.10",
     "jsr:@std/fs@*": "1.0.17",
+    "jsr:@std/internal@^1.0.6": "1.0.7",
     "jsr:@std/path@*": "1.0.9",
     "jsr:@std/path@^1.0.6": "1.0.9",
     "jsr:@std/path@^1.0.9": "1.0.9",
@@ -29,6 +31,12 @@
     "@narumincho/js-ts-code-generator@0.8.2": {
       "integrity": "1c24a23058754c2cd086c27e479c3e5dcf97d433ecb189edff0af679bf862296"
     },
+    "@std/assert@1.0.13": {
+      "integrity": "ae0d31e41919b12c656c742b22522c32fb26ed0cba32975cb0de2a273cb68b29",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
     },
@@ -40,6 +48,9 @@
       "dependencies": [
         "jsr:@std/path@^1.0.9"
       ]
+    },
+    "@std/internal@1.0.7": {
+      "integrity": "39eeb5265190a7bc5d5591c9ff019490bd1f2c3907c044a11b0d545796158a0f"
     },
     "@std/path@1.0.9": {
       "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
