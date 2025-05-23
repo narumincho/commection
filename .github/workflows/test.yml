@@ -11,8 +11,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Build step
-        run: deno task build-client
       - run: deno check
+      - run: deno task example-codegen
       - run: deno test
       - run: deno publish --dry-run
