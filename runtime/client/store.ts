@@ -201,7 +201,7 @@ export const scanWaitForRequestByIds = <Id, Resource>(
   multipleRequest: (
     ids: ReadonlySet<Id>,
   ) => Promise<ReadonlyMap<Id, DataOrError<Resource>>>,
-) => {
+): void => {
   const ids = [...byIdCallbacksAndDataStateMap].flatMap(
     ([id, callbacksAndResource]) => {
       if (
