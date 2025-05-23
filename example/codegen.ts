@@ -1,4 +1,7 @@
-import { generateCodeAsString, Module } from "@narumincho/js-ts-code-generator";
+import {
+  generateCodeAsString,
+  type Module,
+} from "@narumincho/js-ts-code-generator";
 import { generateCommonCode } from "../codegen/common.ts";
 import { type SchemaInput, schemaInputToSchema } from "../codegen/schema.ts";
 import { generateServerCode } from "../codegen/server.ts";
@@ -11,7 +14,7 @@ const writeAndFormatCode = async (path: string, code: Module) => {
     generateCodeAsString({
       code,
       codeType: "TypeScript",
-      generatedByLinks: ["commection in unloss"],
+      generatedByLinks: ["https://jsr.io/@narumincho/commection@0.0.1"],
     }),
   );
 

@@ -1,7 +1,16 @@
 {
+  "name": "@narumincho/commection",
+  "version": "0.0.1",
+  "exports": {
+    "./codegen/common": "./codegen/common.ts",
+    "./codegen/server": "./codegen/server.ts",
+    "./codegen/client": "./codegen/client.ts",
+    "./codegen/schema": "./codegen/schema.ts"
+  },
   "compilerOptions": {
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "erasableSyntaxOnly": true,
     "jsx": "react",
     "jsxFactory": "React.createElement",
     "jsxFragmentFactory": "React.Fragment",
